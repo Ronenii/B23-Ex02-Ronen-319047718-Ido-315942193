@@ -7,65 +7,72 @@ namespace CSharp_Ex2
 {
     class IO
     {
-        private static int m_Row, m_Col, m_BoardSize;
-        private static string m_Input, m_Input2; // Generic input vars used for all types of input
-        public int Row
-        {
-            get
-            {
-                return m_Row;
-            }
-        }
-        public int Col
-        {
-            get
-            {
-                return m_Col;
-            }
-        }
+        private static string m_Input; // Generic input vars used for all types of input
 
-        //
-        public static void getPlayerTurnInput()
+        // Prompts the player to input a board size and while the input is invalid prompts the player to to input again. return the size as int.
+        public static int getBoardSizeInput()
         {
             do
             {
-                Console.WriteLine("Row: ");
+                Console.WriteLine("Please enter board size: ");
                 m_Input = Console.ReadLine();
-                Console.WriteLine("Col: ");
-                m_Input2 = Console.ReadLine();
             }
-            while(!playerTurnInputIsValid());
+            while (!boardSizeIsValid());
 
+            return Int32.Parse(m_Input);
+        }
+        
+
+        // Returns true if the input is correct, otherwise prints error and returns false
+        private static bool boardSizeIsValid()
+        {
+            if(!(inputLengthIsValid() && boardInputCharIsValid()))
+            {
+                Console.WriteLine("Size must be between 3-9, please try again.");
+            }
+            return inputLengthIsValid() && boardInputCharIsValid();
         }
 
-        // Checks if the player's input of rows and columns is valid.
-        private static bool playerTurnInputIsValid()
+        // Returns true if the given input char is valid
+        private static bool boardInputCharIsValid()
         {
-            return rowOrColumnIsValid(m_Input) && rowOrColumnIsValid(m_Input2);
+            char input = m_Input[0];
+            return ((input >= '3') && (input <= '9'));
+        }
+
+        // Prompts the player to input a row or a column and prompts him again while input is invalid. returns the input as int.
+        public static int GetPlayerInput(string i_InputType, int i_BoardSize)
+        {
+            do
+            {
+                Console.WriteLine("{0}: ", i_InputType);
+                m_Input = Console.ReadLine();
+            }
+            while (!rowOrColumnInputIsValid(i_InputType, i_BoardSize));
+
+            return Int32.Parse(m_Input);
         }
 
         // Checks if the given input is 'Q' or a number in the range 0-9, prints out error if input is invalid.
-        private static bool rowOrColumnIsValid(string i_Input)
+        private static bool rowOrColumnInputIsValid(string i_InputType, int i_BoardSize)
         {
-            bool inputIsValid = true;
-            char input;
-            if(i_Input.Length != 1)
+            if(!(inputLengthIsValid() && rowOrColumnCharIsValid(i_BoardSize)))
             {
-                inputIsValid = false;
+                Console.WriteLine("{0} is invalid, please try again.", i_InputType);
             }
+            return inputLengthIsValid() && rowOrColumnCharIsValid(i_BoardSize);
+        }
 
-            input = i_Input[0];
-            if(input != 'Q' && (input < '0' || input > '9'))
-            {
-                inputIsValid = false;
-            }
+        private static bool inputLengthIsValid()
+        {
+            return m_Input.Length == 1;
+        }
 
-            if(!inputIsValid)
-            {
-                Console.WriteLine("Input is invalid, please try again.");
-            }
-
-            return inputIsValid;
+        // Returns true if the row or column input is inbounds or is q
+        private static bool rowOrColumnCharIsValid(int i_BoardSize)
+        {
+            char input = m_Input[0];
+            return (input == 'Q') || (input >= '1' && input <= Convert.ToChar(i_BoardSize));
         }
     }
 }
