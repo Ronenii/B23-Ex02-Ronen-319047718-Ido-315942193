@@ -7,7 +7,7 @@ namespace CSharp_Ex2
 {
     class IO
     {
-        private static int m_Row, m_Col, m_Size;
+        private static int m_Row, m_Col, m_BoardSize;
         private static string m_Input, m_Input2; // Generic input vars used for all types of input
         public int Row
         {

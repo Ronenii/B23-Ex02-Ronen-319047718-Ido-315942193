@@ -58,6 +58,7 @@ namespace CSharp_Ex2
             updateOccupationArrays(i_Row,i_Col);
         }
 
+        // updated the occupation arrays initialized in the beginning.
         private void updateOccupationArrays(int i_Row, int i_Col)
         {
             m_NumOfCellsOccupiedInRows[i_Row]++;
