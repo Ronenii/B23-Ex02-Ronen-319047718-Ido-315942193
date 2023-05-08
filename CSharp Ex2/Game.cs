@@ -50,8 +50,8 @@ namespace CSharp_Ex2
 
         // Returns true or false based on if the game ended.
         private static bool gameEnded()
-        {
-            // Scan the board to see if someone won or if it is a tie, return true if so
+        { 
+            
             return false;
         }
 
