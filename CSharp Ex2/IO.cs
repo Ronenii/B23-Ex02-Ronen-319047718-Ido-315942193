@@ -17,27 +17,28 @@ namespace CSharp_Ex2
                 Console.WriteLine("Please enter board size: ");
                 m_Input = Console.ReadLine();
             }
-            while (!boardSizeIsValid());
+            while (!isBoardInputValid());
 
             return Int32.Parse(m_Input);
         }
         
 
         // Returns true if the input is correct, otherwise prints error and returns false
-        private static bool boardSizeIsValid()
+        private static bool isBoardInputValid()
         {
-            if(!(inputLengthIsValid() && boardInputCharIsValid()))
+            bool boardInputValid = (inputLengthIsValid() && isBoardInputCharValid());
+            if (!boardInputValid)
             {
                 Console.WriteLine("Size must be between 3-9, please try again.");
             }
-            return inputLengthIsValid() && boardInputCharIsValid();
+            return boardInputValid;
         }
 
         // Returns true if the given input char is valid
-        private static bool boardInputCharIsValid()
+        private static bool isBoardInputCharValid()
         {
             char input = m_Input[0];
-            return ((input >= '3') && (input <= '9'));
+            return ((input >= '3') && (input <= '9')) || (input == 'Q');
         }
 
         // Prompts the player to input a row or a column and prompts him again while input is invalid. returns the input as int.
