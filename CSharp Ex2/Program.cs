@@ -7,7 +7,8 @@ namespace CSharp_Ex2
     {
         public static void Main()
         {
-            Game.RunGame();
+            Game game = new Game();
+            game.RunGame();
         }
     }
 }

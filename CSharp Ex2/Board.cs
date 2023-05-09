@@ -23,6 +23,7 @@ namespace CSharp_Ex2
         public Board(int i_BoardSize)
         {
             m_BoardCells = new eCellType[i_BoardSize, i_BoardSize];
+            initBoard(i_BoardSize);
             m_NumOfCellsOccupiedInColumns = new int[i_BoardSize];
             m_NumOfCellsOccupiedInRows = new int[i_BoardSize];
         }
@@ -45,7 +46,7 @@ namespace CSharp_Ex2
         // TODO: Need to validate the given cell, we need to do this in the io class
         public void UpdateBoardCell(int i_Row, int i_Col, ePlayers i_Player)
         {
-            switch(i_Player)
+            switch (i_Player)
             {
                 case ePlayers.PlayerOne:
                     m_BoardCells[i_Row, i_Col] = eCellType.Cross;
@@ -55,7 +56,7 @@ namespace CSharp_Ex2
                     break;
             }
 
-            updateOccupationArrays(i_Row,i_Col);
+            updateOccupationArrays(i_Row, i_Col);
         }
 
         // updated the occupation arrays initialized in the beginning.
@@ -76,6 +77,18 @@ namespace CSharp_Ex2
                 m_NumOfCellsOccupiedInDiagonals[1]++;
             }
 
+        }
+
+        //Initilize board with empty cells
+        private void initBoard(int i_BoardSize)
+        {
+            for (int rowIndex = 0; rowIndex < i_BoardSize; rowIndex++)
+            {
+                for (int colIndex = 0; colIndex < i_BoardSize; colIndex++)
+                {
+                    m_BoardCells[rowIndex, colIndex] = eCellType.Empty;
+                }
+            }
         }
     }
 }

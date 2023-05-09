@@ -13,34 +13,45 @@ namespace CSharp_Ex2
 
     public class Game
     {
-        private static ePlayers currentPlayer = ePlayers.PlayerOne;
-        private static Board gameBoard;
-        private static int player1Score = 0,  player2Score = 0;
-        private static bool quitGame = false;
+        private ePlayers m_currentPlayer;
+        private int m_player1Score;
+        private int m_player2Score;
+        private bool m_quitGame;
+        private int m_boardSize;
+
+        public Game()
+        {
+            m_currentPlayer = ePlayers.PlayerOne;
+            m_player1Score = 0;
+            m_player2Score = 0;
+            m_quitGame = false;
+            m_boardSize = 0;
+        }
 
         // Main game loop
-        public static void RunGame()
+        public void RunGame()
         {
-            initGame();
-            while (!quitGame)
+            m_boardSize = IO.getBoardSizeInput();
+            gameManagementHandler();
+        }
+
+        private void gameManagementHandler()
+        {
+            if (m_boardSize == -1)
             {
-                while (!gameEnded() && !quitGame)
+                m_quitGame = true;
+            }
+            while (!m_quitGame)
+            {
+                while (!isGameEnded())
                 {
                     playTurn();
                 }
                 resetGame();
             }
         }
-
-
-        // Initializes the board and everything else needed for the game
-        private static void initGame()
-        {
-            
-        }
-
         // Player turn logic.
-        private static void playTurn()
+        private void playTurn()
         {
             // TODO: Prompt player to make a move
             // TODO: Check player's move
@@ -49,10 +60,23 @@ namespace CSharp_Ex2
         }
 
         // Returns true or false based on if the game ended.
-        private static bool gameEnded()
-        { 
-            
-            return false;
+        private bool isGameEnded()
+        {
+            bool gameStatus = false;
+            if (m_quitGame == true)
+            {
+                gameStatus = true;
+            }
+            if (isPlayerWon())
+            {
+                gameStatus = true;
+            }
+            return gameStatus;
+        }
+
+        private bool isPlayerWon()
+        {
+            throw new NotImplementedException();
         }
 
         // Restes the game board and keeps the score as is
@@ -62,15 +86,15 @@ namespace CSharp_Ex2
         }
 
         // Changes the current player to the other player
-        private static void changePlayer()
+        private void changePlayer()
         {
-            if (currentPlayer.Equals(ePlayers.PlayerOne))
+            if (m_currentPlayer.Equals(ePlayers.PlayerOne))
             {
-                currentPlayer = ePlayers.PlayerTwo;
+                m_currentPlayer = ePlayers.PlayerTwo;
             }
             else
             {
-                currentPlayer = ePlayers.PlayerOne;
+                m_currentPlayer = ePlayers.PlayerOne;
             }
         }
     }
