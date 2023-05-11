@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CSharp_Ex2
 {
-    internal enum eCellType
+    public enum eCellType
     {
         Empty,
         Cross,
@@ -26,6 +26,14 @@ namespace CSharp_Ex2
             initBoard(i_BoardSize);
             m_NumOfCellsOccupiedInColumns = new int[i_BoardSize];
             m_NumOfCellsOccupiedInRows = new int[i_BoardSize];
+        }
+
+        public eCellType[,] BoardCells
+        {
+            get
+            {
+                return m_BoardCells;
+            }
         }
 
         public int BoardSize
