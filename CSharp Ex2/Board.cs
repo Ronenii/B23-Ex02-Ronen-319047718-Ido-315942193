@@ -28,6 +28,7 @@ namespace CSharp_Ex2
             m_NumOfCellsOccupiedInColumns = new int[i_BoardSize];
             m_NumOfCellsOccupiedInRows = new int[i_BoardSize];
             m_turn = i_BoardSize * i_BoardSize;
+            m_BoardSize = i_BoardSize;
         }
 
 

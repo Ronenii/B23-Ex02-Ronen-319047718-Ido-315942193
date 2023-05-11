@@ -40,6 +40,8 @@ namespace CSharp_Ex2
                 while (!isGameEnded())
                 {
                     playTurn(board);
+                    Ex02.ConsoleUtils.Screen.Clear();
+                    IO.printGameBoard(board);
                 }
                 resetGame(board);
             }
@@ -60,8 +62,8 @@ namespace CSharp_Ex2
             i_board.BoardCells[row, column] = m_currentPlayer.CellType;
             i_board.Turn--;
 
-
             changePlayer();
+
         }
 
         // Returns true or false based on if the game ended.
@@ -105,10 +107,17 @@ namespace CSharp_Ex2
         private bool isMoveValid(int i_row, int i_col, Board board)
         {
             bool moveValidation = true;
-            if (!board.BoardCells[i_row, i_col].Equals(eCellType.Empty))
+            if (i_col >= m_boardSize || i_row >= m_boardSize || i_row < 0 || i_col < 0)
             {
-                Console.WriteLine("The cell is already occupied");
                 moveValidation = false;
+            }
+            else if (!board.BoardCells[i_row, i_col].Equals(eCellType.Empty))
+            {
+                moveValidation = false;
+            }
+            if (moveValidation == false)
+            {
+                Console.WriteLine("The choosen cell is invalid!");
             }
             return moveValidation;
         }
