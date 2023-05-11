@@ -15,6 +15,7 @@ namespace CSharp_Ex2
     public class Board
     {
         private int m_BoardSize;
+        private int m_turn;
         private eCellType[,] m_BoardCells = null;
         private int[] m_NumOfCellsOccupiedInRows; // Each index of this array represents the number of occupied cells in the corresponding row index
         private int[] m_NumOfCellsOccupiedInColumns; // Each index of this array represents the number of occupied cells in the corresponding column index
@@ -26,7 +27,9 @@ namespace CSharp_Ex2
             initBoard(i_BoardSize);
             m_NumOfCellsOccupiedInColumns = new int[i_BoardSize];
             m_NumOfCellsOccupiedInRows = new int[i_BoardSize];
+            m_turn = i_BoardSize * i_BoardSize;
         }
+
 
         public eCellType[,] BoardCells
         {
@@ -46,6 +49,17 @@ namespace CSharp_Ex2
             set
             {
                 m_BoardSize = value;
+            }
+        }
+        public int Turn
+        {
+            get
+            {
+                return m_turn;
+            }
+            set
+            {
+                m_turn = value;
             }
         }
 
@@ -88,7 +102,7 @@ namespace CSharp_Ex2
         }
 
         //Initilize board with empty cells
-        private void initBoard(int i_BoardSize)
+        public void initBoard(int i_BoardSize)
         {
             for (int rowIndex = 0; rowIndex < i_BoardSize; rowIndex++)
             {

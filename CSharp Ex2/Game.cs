@@ -5,33 +5,26 @@ using System.Text;
 
 namespace CSharp_Ex2
 {
-    public enum ePlayers
-    {
-        PlayerOne,
-        PlayerTwo
-    }
-
     public class Game
     {
-        private ePlayers m_currentPlayer;
-        private int m_player1Score;
-        private int m_player2Score;
+        private Player m_currentPlayer;
         private bool m_quitGame;
         private int m_boardSize;
+        private Player m_firstPlayer = new Player(ePlayers.PlayerOne, 0, eMode.Human, eCellType.Cross);
+        private Player m_secondPlayer = new Player(ePlayers.PlayerTwo, 0, eMode.Human, eCellType.Circle);
 
         public Game()
         {
-            m_currentPlayer = ePlayers.PlayerOne;
-            m_player1Score = 0;
-            m_player2Score = 0;
             m_quitGame = false;
             m_boardSize = 0;
+            m_currentPlayer = m_firstPlayer;
         }
 
         // Main game loop
         public void RunGame()
         {
             m_boardSize = IO.getBoardSizeInput();
+            m_secondPlayer.Mode = IO.getPlayingMode();
             gameManagementHandler();
         }
 
@@ -41,21 +34,33 @@ namespace CSharp_Ex2
             {
                 m_quitGame = true;
             }
+            Board board = new Board(m_boardSize);
             while (!m_quitGame)
             {
                 while (!isGameEnded())
                 {
-                    playTurn();
+                    playTurn(board);
                 }
-                resetGame();
+                resetGame(board);
             }
         }
         // Player turn logic.
-        private void playTurn()
+        private void playTurn(Board i_board)
         {
-            // TODO: Prompt player to make a move
-            // TODO: Check player's move
-            // TODO: update the game board
+            int row;
+            int column;
+            do
+            {
+                PointIndex point = IO.GetHumanPointIndex();
+                row = point.Row;
+                column = point.Column;
+            }
+            while (!isMoveValid(row, column, i_board));
+
+            i_board.BoardCells[row, column] = m_currentPlayer.CellType;
+            i_board.Turn--;
+
+
             changePlayer();
         }
 
@@ -76,26 +81,36 @@ namespace CSharp_Ex2
 
         private bool isPlayerWon()
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         // Restes the game board and keeps the score as is
-        private static void resetGame()
+        private void resetGame(Board i_board)
         {
-            // TODO: Clear the screen and start a new game, player score doesn't reset
+            i_board.initBoard(m_boardSize);
         }
 
         // Changes the current player to the other player
         private void changePlayer()
         {
-            if (m_currentPlayer.Equals(ePlayers.PlayerOne))
+            if (m_currentPlayer.PlayerId.Equals(ePlayers.PlayerOne))
             {
-                m_currentPlayer = ePlayers.PlayerTwo;
+                m_currentPlayer = m_secondPlayer;
             }
             else
             {
-                m_currentPlayer = ePlayers.PlayerOne;
+                m_currentPlayer = m_firstPlayer;
             }
+        }
+        private bool isMoveValid(int i_row, int i_col, Board board)
+        {
+            bool moveValidation = true;
+            if (!board.BoardCells[i_row, i_col].Equals(eCellType.Empty))
+            {
+                Console.WriteLine("The cell is already occupied");
+                moveValidation = false;
+            }
+            return moveValidation;
         }
     }
 }

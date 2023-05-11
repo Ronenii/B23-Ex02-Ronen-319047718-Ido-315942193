@@ -31,6 +31,74 @@ namespace CSharp_Ex2
             return boardSize;
         }
 
+        public static eMode getPlayingMode()
+        {
+            string modeChoosen;
+            eMode eModeChoosen;
+            do
+            {
+                Console.WriteLine("Please enter playing mode:");
+                Console.WriteLine("Press 1 for human\nPress 2 for computer");
+                modeChoosen = Console.ReadLine();
+            }
+            while (!isModeValid(modeChoosen, out eModeChoosen));
+            return eModeChoosen;
+        }
+
+        public static PointIndex GetHumanPointIndex()
+        {
+            string rowStr;
+            string colStr;
+            PointIndex o_pointIndex;
+            do
+            {
+                Console.WriteLine("Please insert row index and then column index");
+                Console.Write("The row index is: ");
+                rowStr = Console.ReadLine();
+                Console.Write("The column index is: ");
+                colStr = Console.ReadLine();
+            }
+            while (!isPointIndexIsValid(rowStr, colStr, out o_pointIndex));
+            return o_pointIndex;
+        }
+
+        private static bool isPointIndexIsValid(string i_rowStr, string i_colStr, out PointIndex o_pointIndex)
+        {
+            int rowIndex = 0;
+            int colIndex = 0;
+            bool pointIndexValidation = false;
+            if (int.TryParse(i_rowStr, out rowIndex))
+            {
+                if (int.TryParse(i_colStr, out colIndex))
+                {
+                    pointIndexValidation = true;
+                }
+            }
+            o_pointIndex = new PointIndex(rowIndex, colIndex);
+
+            return pointIndexValidation;
+        }
+
+        private static bool isModeValid(string i_modeChoosen, out eMode o_mode)
+        {
+            o_mode = eMode.Human;
+            bool modeValidation = false;
+            if (i_modeChoosen == "1")
+            {
+                o_mode = eMode.Human;
+                modeValidation = true;
+            }
+            else if (i_modeChoosen == "2")
+            {
+                o_mode = eMode.Computer;
+                modeValidation = true;
+            }
+            else
+            {
+                Console.WriteLine("Invalid Input");
+            }
+            return modeValidation;
+        }
 
         // Returns true if the input is correct, otherwise prints error and returns false
         private static bool isBoardInputValid(string i_Input)
