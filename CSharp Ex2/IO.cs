@@ -19,15 +19,11 @@ namespace CSharp_Ex2
                 Console.Write("Please enter board size: ");
                 userBoardSizeInputStr = Console.ReadLine();
             }
-            while (!isBoardSizeInputValid(userBoardSizeInputStr));
+            while (!isBoardSizeInputValid(userBoardSizeInputStr, out boardSize));
 
             if (userBoardSizeInputStr.Equals("Q"))
             {
                 boardSize = -1;
-            }
-            else
-            {
-                boardSize = int.Parse(userBoardSizeInputStr);
             }
 
             return boardSize;
