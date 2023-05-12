@@ -10,6 +10,7 @@ namespace CSharp_Ex2
         private Player m_currentPlayer;
         private bool m_quitGame;
         private int m_boardSize;
+        private Board m_board;
         private Player m_firstPlayer = new Player(ePlayers.PlayerOne, 0, eMode.Human, eCellType.Cross);
         private Player m_secondPlayer = new Player(ePlayers.PlayerTwo, 0, eMode.Human, eCellType.Circle);
 
@@ -18,6 +19,7 @@ namespace CSharp_Ex2
             m_quitGame = false;
             m_boardSize = 0;
             m_currentPlayer = m_firstPlayer;
+            m_board = null;
         }
 
         // Main game loop
@@ -34,33 +36,39 @@ namespace CSharp_Ex2
             {
                 m_quitGame = true;
             }
-            Board board = new Board(m_boardSize);
+            m_board = new Board(m_boardSize);
             while (!m_quitGame)
             {
+                resetGame();
                 while (!isGameEnded())
                 {
-                    playTurn(board);
                     Ex02.ConsoleUtils.Screen.Clear();
-                    IO.printGameBoard(board);
+                    IO.printGameBoard(m_board);
+                    playTurn();
                 }
-                resetGame(board);
+                //TODO: handle Finish Game with the next four lines
+                Ex02.ConsoleUtils.Screen.Clear();
+                IO.printGameBoard(m_board);
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
             }
         }
         // Player turn logic.
-        private void playTurn(Board i_board)
+        private void playTurn()
         {
             int row;
             int column;
+            IO.PrintPlayerTurnPrompt(m_currentPlayer);
             do
             {
-                PointIndex point = IO.GetHumanPointIndex();
+                PointIndex point = IO.GetHumanPointIndex(m_board, m_currentPlayer);
                 row = point.Row;
                 column = point.Column;
             }
-            while (!isMoveValid(row, column, i_board));
+            while (!isMoveValid(row, column, m_board));
 
-            i_board.BoardCells[row, column] = m_currentPlayer.CellType;
-            i_board.Turn--;
+            m_board.BoardCells[row - 1, column - 1] = m_currentPlayer.CellType;
+            m_board.Turn--;
 
             changePlayer();
 
@@ -69,16 +77,20 @@ namespace CSharp_Ex2
         // Returns true or false based on if the game ended.
         private bool isGameEnded()
         {
-            bool gameStatus = false;
+            bool gameEnded = false;
             if (m_quitGame == true)
             {
-                gameStatus = true;
+                gameEnded = true;
             }
             if (isPlayerWon())
             {
-                gameStatus = true;
+                gameEnded = true;
             }
-            return gameStatus;
+            if (m_board.Turn == 0)
+            {
+                gameEnded = true;
+            }
+            return gameEnded;
         }
 
         private bool isPlayerWon()
@@ -87,9 +99,9 @@ namespace CSharp_Ex2
         }
 
         // Restes the game board and keeps the score as is
-        private void resetGame(Board i_board)
+        private void resetGame()
         {
-            i_board.initBoard(m_boardSize);
+            m_board.initBoard(m_boardSize);
         }
 
         // Changes the current player to the other player
@@ -104,20 +116,20 @@ namespace CSharp_Ex2
                 m_currentPlayer = m_firstPlayer;
             }
         }
-        private bool isMoveValid(int i_row, int i_col, Board board)
+        private bool isMoveValid(int i_row, int i_col, Board i_Board)
         {
             bool moveValidation = true;
-            if (i_col >= m_boardSize || i_row >= m_boardSize || i_row < 0 || i_col < 0)
+            if (i_col > m_boardSize || i_row > m_boardSize || i_row < 1 || i_col < 1)
             {
                 moveValidation = false;
             }
-            else if (!board.BoardCells[i_row, i_col].Equals(eCellType.Empty))
+            else if (!i_Board.BoardCells[i_row - 1, i_col - 1].Equals(eCellType.Empty))
             {
                 moveValidation = false;
             }
             if (moveValidation == false)
             {
-                Console.WriteLine("The choosen cell is invalid!");
+                IO.PrintBoardWithErrors(i_Board, m_currentPlayer, "The cell is already occupied");
             }
             return moveValidation;
         }
