@@ -7,6 +7,8 @@ namespace CSharp_Ex2
 {
     class IO
     {
+        private const string newLineSperator = "=====";
+
         // Prompts the player to input a board size and while the input is invalid prompts the player to to input again. return the size as int.
         public static int getBoardSizeInput()
         {
@@ -31,6 +33,74 @@ namespace CSharp_Ex2
             return boardSize;
         }
 
+        public static eMode getPlayingMode()
+        {
+            string modeChoosen;
+            eMode eModeChoosen;
+            do
+            {
+                Console.WriteLine("Please enter playing mode:");
+                Console.WriteLine("Press 1 for human\nPress 2 for computer");
+                modeChoosen = Console.ReadLine();
+            }
+            while (!isModeValid(modeChoosen, out eModeChoosen));
+            return eModeChoosen;
+        }
+
+        public static PointIndex GetHumanPointIndex()
+        {
+            string rowStr;
+            string colStr;
+            PointIndex o_pointIndex;
+            do
+            {
+                Console.WriteLine("Please insert row index and then column index");
+                Console.Write("The row index is: ");
+                rowStr = Console.ReadLine();
+                Console.Write("The column index is: ");
+                colStr = Console.ReadLine();
+            }
+            while (!isPointIndexIsValid(rowStr, colStr, out o_pointIndex));
+            return o_pointIndex;
+        }
+
+        private static bool isPointIndexIsValid(string i_rowStr, string i_colStr, out PointIndex o_pointIndex)
+        {
+            int rowIndex = 0;
+            int colIndex = 0;
+            bool pointIndexValidation = false;
+            if (int.TryParse(i_rowStr, out rowIndex))
+            {
+                if (int.TryParse(i_colStr, out colIndex))
+                {
+                    pointIndexValidation = true;
+                }
+            }
+            o_pointIndex = new PointIndex(rowIndex, colIndex);
+
+            return pointIndexValidation;
+        }
+
+        private static bool isModeValid(string i_modeChoosen, out eMode o_mode)
+        {
+            o_mode = eMode.Human;
+            bool modeValidation = false;
+            if (i_modeChoosen == "1")
+            {
+                o_mode = eMode.Human;
+                modeValidation = true;
+            }
+            else if (i_modeChoosen == "2")
+            {
+                o_mode = eMode.Computer;
+                modeValidation = true;
+            }
+            else
+            {
+                Console.WriteLine("Invalid Input");
+            }
+            return modeValidation;
+        }
 
         // Returns true if the input is correct, otherwise prints error and returns false
         private static bool isBoardInputValid(string i_Input)
@@ -127,95 +197,28 @@ namespace CSharp_Ex2
         public static void printGameBoard(Board i_GameBoard)
         {
             int boardSize = i_GameBoard.BoardSize;
-            int numOfRowsToPrint = (boardSize * 2); // The number of rows to print in the table (after printing the initial number row
-            int rowInGameBoard; // The corresponding row in i_GameBoard to the printed table
 
-            printNumberRow(boardSize);
-            for (int i = 0; i < numOfRowsToPrint; i++)
+            Console.Write("  ");
+            for (int i = 0; i < boardSize; i++)
             {
-                if (i % 2 == 0)
-                {
-                    rowInGameBoard = i % 2;
-                    printTableRow(i_GameBoard, rowInGameBoard);
-                }
-                else
-                {
-                    printRowSeparator(boardSize);
-                }
-            }
-        }
-
-        // Prints the row of numbers at the top of the table
-        private static void printNumberRow(int i_BoardSize)
-        {
-            for (int i = 0; i < i_BoardSize; i++)
-            {
-                for (int j = 0; j <= 3; j++)
-                {
-                    Console.Write(" ");
-                }
-
-                Console.Write(i + 1); // print column number
+                Console.Write($"  {i} ");
             }
             Console.WriteLine();
-        }
-
-        // Prints the given row to print (the row which contains the Xs and Os)
-        private static void printTableRow(Board i_GameBoard, int i_RowToPrint)
-        {
-            int boardSize = i_GameBoard.BoardSize;
-            int columnsToPrint = boardSize * 4 + 1; // The the number of columns to print in the row (after printing the row number)
-            int columnInGameBoard; // The corresponding row in i_GameBoard to the printed table
-
-            Console.Write(i_RowToPrint + 1);
-            for (int i = 0; i < columnsToPrint; i++)
+            for (int i = 0; i < boardSize; i++)
             {
-                if (i % 4 == 0)
+                Console.Write($"{i} ");
+                for (int j = 0; j < boardSize; j++)
                 {
-                    Console.Write("|");
-
+                    Console.Write($"| {CellTypeUtils.ToCustomShape(i_GameBoard.BoardCells[i, j])} "); // Print empty spaces for the remaining columns
                 }
-                else if ((i + 2) % 4 == 0)
+                Console.Write("|\n");
+                Console.Write("  ");
+                for (int k = 0; k < boardSize - 1; k++)
                 {
-                    columnInGameBoard = i / 4;
-                    printCell(i_GameBoard.BoardCells[i_RowToPrint, columnInGameBoard]);
+                    Console.Write(newLineSperator);
                 }
-                else
-                {
-                    Console.Write(" ");
-                }
-            }
-            Console.WriteLine();
-        }
-
-        // Receives an enum of Cell type and prints the corresponding shape
-        private static void printCell(eCellType i_CurrentCell)
-        {
-            switch (i_CurrentCell)
-            {
-                case eCellType.Empty:
-                    Console.Write(" ");
-                    break;
-                case eCellType.Circle:
-                    Console.Write("O");
-                    break;
-                case eCellType.Cross:
-                    Console.Write("X");
-                    break;
+                Console.WriteLine(); // for the edges
             }
         }
-
-        // Prints the separating rows (the ========== rows)
-        private static void printRowSeparator(int i_BoardSize)
-        {
-            int columnsToPrint = i_BoardSize * 4 + 1; // The the number of columns to print in the row (after printing an initial space)
-            Console.Write(" ");
-            for (int i = 0; i < columnsToPrint; i++)
-            {
-                Console.Write("=");
-            }
-            Console.WriteLine();
-        }
-
     }
 }
