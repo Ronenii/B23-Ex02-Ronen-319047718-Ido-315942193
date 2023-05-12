@@ -12,6 +12,12 @@ namespace CSharp_Ex2
         Circle
     }
 
+    public enum eRowColumn
+    {
+        Row,
+        Column
+    }
+
     public class Board
     {
         private int m_BoardSize;
@@ -27,7 +33,7 @@ namespace CSharp_Ex2
             initBoard(i_BoardSize);
             m_NumOfCellsOccupiedInColumns = new int[i_BoardSize];
             m_NumOfCellsOccupiedInRows = new int[i_BoardSize];
-            m_turn = i_BoardSize * i_BoardSize;
+            m_turn = 0;
             m_BoardSize = i_BoardSize;
         }
 
@@ -105,6 +111,7 @@ namespace CSharp_Ex2
         //Initilize board with empty cells
         public void initBoard(int i_BoardSize)
         {
+            m_turn = i_BoardSize * i_BoardSize;
             for (int rowIndex = 0; rowIndex < i_BoardSize; rowIndex++)
             {
                 for (int colIndex = 0; colIndex < i_BoardSize; colIndex++)
