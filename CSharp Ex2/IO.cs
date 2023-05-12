@@ -19,7 +19,7 @@ namespace CSharp_Ex2
                 Console.Write("Please enter board size: ");
                 userBoardSizeInputStr = Console.ReadLine();
             }
-            while (!isBoardInputValid(userBoardSizeInputStr));
+            while (!isBoardSizeInputValid(userBoardSizeInputStr));
 
             if (userBoardSizeInputStr.Equals("Q"))
             {
@@ -47,6 +47,7 @@ namespace CSharp_Ex2
             return eModeChoosen;
         }
 
+        // Prompts the player to enter a row and column to put his shape in, validates and returns the row and column as a PointIndex.
         public static PointIndex GetHumanPointIndex(Board i_Board, Player i_CurrentPlayer)
         {
             string rowStr;
@@ -63,14 +64,15 @@ namespace CSharp_Ex2
             return o_pointIndex;
         }
 
-        private static bool isPointIndexIsValid(string i_rowStr, string i_colStr, Board i_Board, Player i_CurrentPlayer, out PointIndex o_pointIndex)
+        // Checks if the given input chars are valid, if not prints out error message.
+        private static bool isPointIndexIsValid(string i_RowStr, string i_ColStr, Board i_Board, Player i_CurrentPlayer, out PointIndex o_pointIndex)
         {
             int rowIndex = -1;
             int colIndex = -1;
             bool pointIndexValidation = false;
-            if (int.TryParse(i_rowStr, out rowIndex))
+            if (int.TryParse(i_RowStr, out rowIndex))
             {
-                if (int.TryParse(i_colStr, out colIndex))
+                if (int.TryParse(i_ColStr, out colIndex))
                 {
                     pointIndexValidation = true;
                 }
@@ -78,11 +80,13 @@ namespace CSharp_Ex2
             o_pointIndex = new PointIndex(rowIndex, colIndex);
             if (!pointIndexValidation)
             {
-                PrintBoardWithErrors(i_Board, i_CurrentPlayer, "Cell out of bounds");
+                string errorMessage = string.Format("Input must be between 1 and {0}", i_Board.BoardSize);
+                PrintBoardWithErrors(i_Board, i_CurrentPlayer, errorMessage);
             }
             return pointIndexValidation;
         }
 
+        // Prints out the board, the player turn and the error message from the previous move.
         public static void PrintBoardWithErrors(Board i_Board, Player i_CurrentPlayer, string i_ErrorMessage)
         {
             Ex02.ConsoleUtils.Screen.Clear();
@@ -96,18 +100,19 @@ namespace CSharp_Ex2
             Console.WriteLine("Invalid input: {0}", i_ErrorMessage);
         }
 
-        private static bool isModeValid(string i_modeChoosen, out eMode o_mode)
+        // Returns true if the chosen game mode is valid, otherwise returns false and prints error.
+        private static bool isModeValid(string i_ModeChoosen, out eMode o_Mode)
         {
-            o_mode = eMode.Human;
+            o_Mode = eMode.Human;
             bool modeValidation = false;
-            if (i_modeChoosen == "1")
+            if (i_ModeChoosen == "1")
             {
-                o_mode = eMode.Human;
+                o_Mode = eMode.Human;
                 modeValidation = true;
             }
-            else if (i_modeChoosen == "2")
+            else if (i_ModeChoosen == "2")
             {
-                o_mode = eMode.Computer;
+                o_Mode = eMode.Computer;
                 modeValidation = true;
             }
             else
@@ -117,6 +122,7 @@ namespace CSharp_Ex2
             }
             return modeValidation;
         }
+
         public static void PrintPlayerTurnPrompt(Player i_CurrentPlayer)
         {
             if (i_CurrentPlayer.PlayerId == ePlayers.PlayerOne)
@@ -129,28 +135,34 @@ namespace CSharp_Ex2
             }
         }
 
-        // Returns true if the input is correct, otherwise prints error and returns false
-        private static bool isBoardInputValid(string i_Input)
+        // Returns true if the board size input is correct, otherwise prints error and returns false
+        private static bool isBoardSizeInputValid(string i_Input, out int i_BoardSize)
         {
-            bool boardInputValid = (inputLengthIsValid(i_Input) && isBoardInputCharValid(i_Input));
-            if (!boardInputValid)
+
+            bool boardInputValid = false;
+            if(i_Input.Equals("Q"))
             {
-                Console.WriteLine("Size must be between 3-9, please try again.");
+                boardInputValid = true;
+                i_BoardSize = -1;
+            }
+            else if(int.TryParse(i_Input, out i_BoardSize))
+            {
+                if(i_BoardSize >= 3 && i_BoardSize <= 9)
+                {
+                    boardInputValid = true;
+                }
+                else
+                {
+                    printErrorMessage("size must be a number between 3 and 9");
+                    boardInputValid = false;
+                }
+            }
+            else
+            {
+                printErrorMessage("size must be a number between 3 and 9");
+                boardInputValid = false;
             }
             return boardInputValid;
-        }
-
-        // Returns true if the given input char is valid
-        private static bool isBoardInputCharValid(string i_Input)
-        {
-            char input = i_Input[0];
-            return ((input >= '3') && (input <= '9')) || (input == 'Q');
-        }
-
-
-        private static bool inputLengthIsValid(string i_Input)
-        {
-            return i_Input.Length == 1;
         }
 
 
@@ -160,25 +172,27 @@ namespace CSharp_Ex2
             int boardSize = i_GameBoard.BoardSize;
 
             Console.Write("  ");
-            for (int i = 1; i <= boardSize; i++)
-            {
-                Console.Write($"  {i} ");
-            }
+            for (int i = 1; i <= boardSize; i++)    //
+            {                                       // Prints out the first line of numbers at the top of the board
+                Console.Write($"  {i} ");           //
+            }                                       //
+
             Console.WriteLine();
-            for (int i = 1; i <= boardSize; i++)
+            for (int i = 1; i <= boardSize; i++) // Printing the board itself 
             {
-                Console.Write($"{i} ");
+                Console.Write($"{i} "); // Print the number at the beginning of each row
                 for (int j = 1; j <= boardSize; j++)
                 {
                     Console.Write($"| {CellTypeUtils.ToCustomShape(i_GameBoard.BoardCells[i - 1, j - 1])} "); // Print empty spaces for the remaining columns
                 }
                 Console.WriteLine("|");
-                printLineSeperator(boardSize);
+                printRowSeparator(boardSize);
                 Console.WriteLine();
             }
         }
 
-        private static void printLineSeperator(int boardSize)
+        // Prints the ==== separator
+        private static void printRowSeparator(int boardSize)
         {
             Console.Write("  ");
             for (int k = 0; k < boardSize; k++)

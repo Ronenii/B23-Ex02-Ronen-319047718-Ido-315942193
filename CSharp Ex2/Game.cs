@@ -22,7 +22,7 @@ namespace CSharp_Ex2
             m_board = null;
         }
 
-        // Main game loop
+        // Game loop
         public void RunGame()
         {
             m_boardSize = IO.getBoardSizeInput();
@@ -30,6 +30,7 @@ namespace CSharp_Ex2
             gameManagementHandler();
         }
 
+        // The handler of the main game loop
         private void gameManagementHandler()
         {
             if (m_boardSize == -1)
@@ -53,6 +54,7 @@ namespace CSharp_Ex2
                 Console.ReadKey();
             }
         }
+
         // Player turn logic.
         private void playTurn()
         {
@@ -116,20 +118,25 @@ namespace CSharp_Ex2
                 m_currentPlayer = m_firstPlayer;
             }
         }
+
+        // Checks that the move is within board bounds and isn't played on a taken cell.
         private bool isMoveValid(int i_row, int i_col, Board i_Board)
         {
             bool moveValidation = true;
+            string errorMessage = string.Empty;
             if (i_col > m_boardSize || i_row > m_boardSize || i_row < 1 || i_col < 1)
             {
                 moveValidation = false;
+                errorMessage = "Cell out of bounds.";
             }
             else if (!i_Board.BoardCells[i_row - 1, i_col - 1].Equals(eCellType.Empty))
             {
                 moveValidation = false;
+                errorMessage = "Cell is occupied";
             }
             if (moveValidation == false)
             {
-                IO.PrintBoardWithErrors(i_Board, m_currentPlayer, "The cell is already occupied");
+                IO.PrintBoardWithErrors(i_Board, m_currentPlayer, errorMessage);
             }
             return moveValidation;
         }
