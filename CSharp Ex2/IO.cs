@@ -18,6 +18,7 @@ namespace CSharp_Ex2
             {
                 Console.Write("Please enter board size: ");
                 userBoardSizeInputStr = Console.ReadLine();
+                Ex02.ConsoleUtils.Screen.Clear();
             }
             while (!isBoardSizeInputValid(userBoardSizeInputStr, out boardSize));
 
@@ -27,6 +28,12 @@ namespace CSharp_Ex2
             }
 
             return boardSize;
+        }
+
+        public static void PrintScore(Player i_P1, Player i_P2)
+        {
+            Console.WriteLine("{0}: {1}",i_P1.ToString(), i_P1.Score);
+            Console.WriteLine("{0}: {1}", i_P2.ToString(), i_P2.Score);
         }
 
         public static eMode getPlayingMode()
@@ -46,17 +53,24 @@ namespace CSharp_Ex2
         // Prompts the player to enter a row and column to put his shape in, validates and returns the row and column as a PointIndex.
         public static PointIndex GetHumanPointIndex(Board i_Board, Player i_CurrentPlayer, Player i_firstPlayer, Player i_secondPlayer)
         {
-            string rowStr;
-            string colStr;
-            PointIndex o_pointIndex;
+            string rowStr = null;
+            string colStr = null;
+            bool isExit = false;
+            PointIndex o_pointIndex = new PointIndex(0, 0);
             do
             {
                 Console.Write("The row index is: ");
                 rowStr = Console.ReadLine();
-                Console.Write("The column index is: ");
-                colStr = Console.ReadLine();
+                isExit = (rowStr.ToUpper() == "Q");
+                if (!isExit)
+                {
+                    Console.Write("The column index is: ");
+                    colStr = Console.ReadLine();
+                    isExit = (colStr.ToUpper() == "Q");
+                }
             }
             while (!isPointIndexIsValid(rowStr, colStr, i_Board, i_CurrentPlayer, i_firstPlayer, i_secondPlayer, out o_pointIndex));
+
             return o_pointIndex;
         }
 
@@ -96,6 +110,13 @@ namespace CSharp_Ex2
             Console.WriteLine("Invalid input: {0}", i_ErrorMessage);
         }
 
+        public static void printGameEndedMessage(string i_EndingMessage)
+        {
+            Console.WriteLine("Game ended: {0}", i_EndingMessage);
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+        }
+
         // Returns true if the chosen game mode is valid, otherwise returns false and prints error.
         private static bool isModeValid(string i_ModeChoosen, out eMode o_Mode)
         {
@@ -109,6 +130,11 @@ namespace CSharp_Ex2
             else if (i_ModeChoosen == "2")
             {
                 o_Mode = eMode.Computer;
+                modeValidation = true;
+            }
+            else if (i_ModeChoosen.ToUpper() == "Q")
+            {
+                o_Mode = eMode.Exit;
                 modeValidation = true;
             }
             else
@@ -136,7 +162,7 @@ namespace CSharp_Ex2
         {
 
             bool boardInputValid = false;
-            if (i_Input.Equals("Q"))
+            if (i_Input.ToUpper().Equals("Q"))
             {
                 boardInputValid = true;
                 i_BoardSize = -1;

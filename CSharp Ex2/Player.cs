@@ -13,7 +13,8 @@ namespace CSharp_Ex2
     public enum eMode
     {
         Human,
-        Computer
+        Computer,
+        Exit
     }
     public class Player
     {
@@ -71,7 +72,7 @@ namespace CSharp_Ex2
             {
                 return m_cellType;
             }
-            set 
+            set
             {
                 m_cellType = value;
             }
