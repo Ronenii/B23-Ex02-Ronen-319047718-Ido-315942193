@@ -96,6 +96,11 @@ namespace CSharp_Ex2
             Console.WriteLine("Invalid input: {0}", i_ErrorMessage);
         }
 
+        public static void printGameEndedMessage(string i_EndingMessage)
+        {
+            Console.WriteLine("Game ended: {0}", i_EndingMessage);
+        }
+
         // Returns true if the chosen game mode is valid, otherwise returns false and prints error.
         private static bool isModeValid(string i_ModeChoosen, out eMode o_Mode)
         {

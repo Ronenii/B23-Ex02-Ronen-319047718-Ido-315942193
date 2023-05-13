@@ -76,5 +76,21 @@ namespace CSharp_Ex2
                 m_cellType = value;
             }
         }
+
+        public override string ToString()
+        {
+            string playerString = string.Empty;
+            switch(PlayerId)
+            {
+                case ePlayers.PlayerOne:
+                    playerString = "Player 1";
+                    break;
+                case ePlayers.PlayerTwo:
+                    playerString = "Player 2";
+                    break;
+            }
+
+            return playerString;
+        }
     }
 }
