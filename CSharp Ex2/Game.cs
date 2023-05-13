@@ -44,12 +44,12 @@ namespace CSharp_Ex2
                 while (!isGameEnded())
                 {
                     Ex02.ConsoleUtils.Screen.Clear();
-                    IO.printGameBoard(m_board);
+                    IO.printGameBoard(m_board, m_firstPlayer, m_secondPlayer);
                     playTurn();
                 }
                 //TODO: handle Finish Game with the next four lines
                 Ex02.ConsoleUtils.Screen.Clear();
-                IO.printGameBoard(m_board);
+                IO.printGameBoard(m_board, m_firstPlayer, m_secondPlayer);
                 Console.WriteLine("Press any key to continue...");
                 Console.ReadKey();
             }
@@ -63,7 +63,7 @@ namespace CSharp_Ex2
             IO.PrintPlayerTurnPrompt(m_currentPlayer);
             do
             {
-                PointIndex point = IO.GetHumanPointIndex(m_board, m_currentPlayer);
+                PointIndex point = IO.GetHumanPointIndex(m_board, m_currentPlayer, m_firstPlayer, m_secondPlayer);
                 row = point.Row;
                 column = point.Column;
             }
@@ -136,7 +136,7 @@ namespace CSharp_Ex2
             }
             if (moveValidation == false)
             {
-                IO.PrintBoardWithErrors(i_Board, m_currentPlayer, errorMessage);
+                IO.PrintBoardWithErrors(i_Board, m_currentPlayer, errorMessage, m_firstPlayer, m_secondPlayer);
             }
             return moveValidation;
         }
