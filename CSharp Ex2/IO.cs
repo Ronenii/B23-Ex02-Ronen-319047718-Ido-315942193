@@ -51,7 +51,7 @@ namespace CSharp_Ex2
         }
 
         // Prompts the player to enter a row and column to put his shape in, validates and returns the row and column as a PointIndex.
-        public static PointIndex GetHumanPointIndex(Board i_Board, Player i_CurrentPlayer)
+        public static PointIndex GetHumanPointIndex(Board i_Board, Player i_CurrentPlayer, Player i_firstPlayer, Player i_secondPlayer)
         {
             string rowStr = null;
             string colStr = null;
@@ -69,13 +69,13 @@ namespace CSharp_Ex2
                     isExit = (colStr.ToUpper() == "Q");
                 }
             }
-            while (!isExit && !isPointIndexIsValid(rowStr, colStr, i_Board, i_CurrentPlayer, out o_pointIndex));
+            while (!isExit && !isPointIndexIsValid(rowStr, colStr, i_Board, i_CurrentPlayer, i_firstPlayer, i_secondPlayer, out o_pointIndex));
 
             return o_pointIndex;
         }
 
         // Checks if the given input chars are valid, if not prints out error message.
-        private static bool isPointIndexIsValid(string i_RowStr, string i_ColStr, Board i_Board, Player i_CurrentPlayer, out PointIndex o_pointIndex)
+        private static bool isPointIndexIsValid(string i_RowStr, string i_ColStr, Board i_Board, Player i_CurrentPlayer, Player i_firstPlayer, Player i_secondPlayer, out PointIndex o_pointIndex)
         {
             int rowIndex = -1;
             int colIndex = -1;
@@ -91,16 +91,16 @@ namespace CSharp_Ex2
             if (!pointIndexValidation)
             {
                 string errorMessage = string.Format("Input must be between 1 and {0}", i_Board.BoardSize);
-                PrintBoardWithErrors(i_Board, i_CurrentPlayer, errorMessage);
+                PrintBoardWithErrors(i_Board, i_CurrentPlayer, errorMessage, i_firstPlayer, i_secondPlayer);
             }
             return pointIndexValidation;
         }
 
         // Prints out the board, the player turn and the error message from the previous move.
-        public static void PrintBoardWithErrors(Board i_Board, Player i_CurrentPlayer, string i_ErrorMessage)
+        public static void PrintBoardWithErrors(Board i_Board, Player i_CurrentPlayer, string i_ErrorMessage, Player i_firstPlayer, Player i_secondPlayer)
         {
             Ex02.ConsoleUtils.Screen.Clear();
-            printGameBoard(i_Board);
+            printGameBoard(i_Board, i_firstPlayer, i_secondPlayer);
             PrintPlayerTurnPrompt(i_CurrentPlayer);
             printErrorMessage(i_ErrorMessage);
         }
@@ -110,7 +110,7 @@ namespace CSharp_Ex2
             Console.WriteLine("Invalid input: {0}", i_ErrorMessage);
         }
 
-        public static void printGameEndedMessage(string i_EndingMessage)
+        public static void PrintGameEndedMessage(string i_EndingMessage)
         {
             Console.WriteLine("Game ended: {0}", i_EndingMessage);
             Console.WriteLine("Press any key to continue...");
@@ -189,9 +189,10 @@ namespace CSharp_Ex2
 
 
         // Prints out the Game Board
-        public static void printGameBoard(Board i_GameBoard)
+        public static void printGameBoard(Board i_GameBoard, Player firstPlayer, Player secondPlayer)
         {
             int boardSize = i_GameBoard.BoardSize;
+            Console.WriteLine($"{firstPlayer.ToString()}: {firstPlayer.Score}    {secondPlayer.ToString()}: {secondPlayer.Score}\n");
 
             Console.Write("  ");
             for (int i = 1; i <= boardSize; i++)    //

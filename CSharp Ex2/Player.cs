@@ -72,7 +72,7 @@ namespace CSharp_Ex2
             {
                 return m_cellType;
             }
-            set 
+            set
             {
                 m_cellType = value;
             }
@@ -81,7 +81,7 @@ namespace CSharp_Ex2
         public override string ToString()
         {
             string playerString = string.Empty;
-            switch(PlayerId)
+            switch (PlayerId)
             {
                 case ePlayers.PlayerOne:
                     playerString = "Player 1";
