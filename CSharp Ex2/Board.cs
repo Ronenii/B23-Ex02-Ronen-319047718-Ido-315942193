@@ -155,7 +155,7 @@ namespace CSharp_Ex2
         }
 
         //Initilize board with empty cells
-        public void initBoard(int i_BoardSize)
+        private void initBoard(int i_BoardSize)
         {
             for (int rowIndex = 0; rowIndex < i_BoardSize; rowIndex++)
             {
@@ -164,6 +164,16 @@ namespace CSharp_Ex2
                     m_BoardCells[rowIndex, colIndex] = eCellType.Empty;
                 }
             }
+        }
+
+        public void resetBoard()
+        {
+            m_TurnsLeft = m_BoardSize * m_BoardSize;
+            initBoard(m_BoardSize);
+            Array.Clear(m_OccupiedCellsInColumnBucket,0,m_BoardSize);
+            Array.Clear(m_OccupiedCellsInRowBucket,0,m_BoardSize);
+            Array.Clear(m_OccupiedCellsInDiagonalBucket,0,2);
+
         }
     }
 }

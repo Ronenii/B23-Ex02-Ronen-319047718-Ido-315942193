@@ -30,12 +30,6 @@ namespace CSharp_Ex2
             return boardSize;
         }
 
-        internal static void PrintGoodbyeMessage()
-        {
-            Console.WriteLine("Thank you for playing bye\nEnter any key for closing the window...");
-            Console.ReadKey();
-        }
-
         public static eMode getPlayingMode()
         {
             string modeChoosen;
@@ -56,17 +50,17 @@ namespace CSharp_Ex2
             string rowStr = null;
             string colStr = null;
             bool isExit = false;
-            PointIndex o_pointIndex = new PointIndex(-1, -1);
+            PointIndex o_pointIndex = new PointIndex(0, 0);
             do
             {
                 Console.Write("The row index is: ");
                 rowStr = Console.ReadLine();
-                isExit = rowStr.ToUpper() == "Q";
+                isExit = (rowStr.ToUpper() == "Q");
                 if (!isExit)
                 {
                     Console.Write("The column index is: ");
                     colStr = Console.ReadLine();
-                    isExit = colStr.ToUpper() == "Q";
+                    isExit = (colStr.ToUpper() == "Q");
                 }
             }
             while (!isExit && !isPointIndexIsValid(rowStr, colStr, i_Board, i_CurrentPlayer, out o_pointIndex));
@@ -113,6 +107,8 @@ namespace CSharp_Ex2
         public static void printGameEndedMessage(string i_EndingMessage)
         {
             Console.WriteLine("Game ended: {0}", i_EndingMessage);
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
         }
 
         // Returns true if the chosen game mode is valid, otherwise returns false and prints error.

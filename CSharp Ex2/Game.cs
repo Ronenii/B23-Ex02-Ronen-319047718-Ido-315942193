@@ -9,6 +9,9 @@ namespace CSharp_Ex2
 {
     public class Game
     {
+        private const string gameQuitMessage = "Quitting";
+        private const string boardFullMessage = "Board full. No Winners.";
+
         private Player m_currentPlayer;
         private bool m_quitGame, m_gameEnded;
         private int m_boardSize;
@@ -31,14 +34,14 @@ namespace CSharp_Ex2
             m_boardSize = IO.getBoardSizeInput();
             if (m_boardSize == -1)
             {
-                IO.PrintGoodbyeMessage();
+                m_EndingMessage = gameQuitMessage;
             }
             else
             {
                 m_secondPlayer.Mode = IO.getPlayingMode();
                 if (m_secondPlayer.Mode == eMode.Exit)
                 {
-                    IO.PrintGoodbyeMessage();
+                    m_EndingMessage = gameQuitMessage;
                 }
                 else
                 {
@@ -57,19 +60,20 @@ namespace CSharp_Ex2
             m_board = new Board(m_boardSize);
             while (!m_quitGame)
             {
-                resetGame();
                 while (!isGameEnded())
                 {
                     Ex02.ConsoleUtils.Screen.Clear();
                     IO.printGameBoard(m_board);
                     playTurn();
                 }
+
                 Ex02.ConsoleUtils.Screen.Clear();
                 IO.printGameBoard(m_board);
                 IO.printGameEndedMessage(m_EndingMessage);
-                //Console.WriteLine("Press any key to continue...");
-                //Console.ReadKey();
+                resetGame();
             }
+
+
         }
 
         // Player turn logic.
@@ -90,9 +94,15 @@ namespace CSharp_Ex2
             }
             while (!isMoveValid(row, column, m_board));
 
-            updateBoard(row, column);
-
-            changePlayer();
+            if (row != -1 && column != -1)
+            {
+                updateBoard(row, column);
+                changePlayer();
+            }
+            else
+            {
+                m_quitGame = true;
+            }
 
         }
 
@@ -100,8 +110,8 @@ namespace CSharp_Ex2
         private void updateBoard(int i_Row, int i_Column)
         {
             m_board.UpdateBoardCell(i_Row, i_Column, m_currentPlayer.PlayerId);
-
             m_gameEnded = isPlayerLost(i_Row, i_Column);
+
             if (m_gameEnded)
             {
                 changePlayer();
@@ -213,12 +223,12 @@ namespace CSharp_Ex2
             if (m_quitGame == true)
             {
                 m_gameEnded = true;
-                m_EndingMessage = "Quitting.";
+                m_EndingMessage = gameQuitMessage;
             }
-            if (m_board.TurnsLeft == 0)
+            if (m_board.TurnsLeft == 0 && !m_gameEnded) //If there are no moves and the game didn't end because someone won
             {
                 m_gameEnded = true;
-                m_EndingMessage = "Board full. No Winners.";
+                m_EndingMessage = boardFullMessage;
             }
             return m_gameEnded;
         }
@@ -226,7 +236,9 @@ namespace CSharp_Ex2
         // Restes the game board and keeps the score as is
         private void resetGame()
         {
-            m_board.initBoard(m_boardSize);
+            m_board.resetBoard();
+            m_gameEnded = false;
+            m_currentPlayer = m_firstPlayer;
         }
 
         // Changes the current player to the other player
@@ -247,11 +259,11 @@ namespace CSharp_Ex2
         {
             bool moveValidation = true;
             string errorMessage = string.Empty;
-            if (i_row == -1 && i_col == -1)
+            if (i_Row == -1 && i_Column == -1)
             {
-                IO.PrintGoodbyeMessage();
+                m_EndingMessage = gameQuitMessage;
             }
-            else if (i_col >= m_boardSize || i_row >= m_boardSize || i_row < 0 || i_col < 0)
+            else if (i_Column >= m_boardSize || i_Row >= m_boardSize || i_Row < 0 || i_Column < 0)
             {
                 moveValidation = false;
                 errorMessage = "Cell out of bounds.";
