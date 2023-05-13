@@ -18,6 +18,7 @@ namespace CSharp_Ex2
             {
                 Console.Write("Please enter board size: ");
                 userBoardSizeInputStr = Console.ReadLine();
+                Ex02.ConsoleUtils.Screen.Clear();
             }
             while (!isBoardSizeInputValid(userBoardSizeInputStr, out boardSize));
 
@@ -27,6 +28,12 @@ namespace CSharp_Ex2
             }
 
             return boardSize;
+        }
+
+        internal static void PrintGoodbyeMessage()
+        {
+            Console.WriteLine("Thank you for playing bye\nEnter any key for closing the window...");
+            Console.ReadKey();
         }
 
         public static eMode getPlayingMode()
@@ -46,17 +53,24 @@ namespace CSharp_Ex2
         // Prompts the player to enter a row and column to put his shape in, validates and returns the row and column as a PointIndex.
         public static PointIndex GetHumanPointIndex(Board i_Board, Player i_CurrentPlayer)
         {
-            string rowStr;
-            string colStr;
-            PointIndex o_pointIndex;
+            string rowStr = null;
+            string colStr = null;
+            bool isExit = false;
+            PointIndex o_pointIndex = new PointIndex(-1, -1);
             do
             {
                 Console.Write("The row index is: ");
                 rowStr = Console.ReadLine();
-                Console.Write("The column index is: ");
-                colStr = Console.ReadLine();
+                isExit = rowStr.ToUpper() == "Q";
+                if (!isExit)
+                {
+                    Console.Write("The column index is: ");
+                    colStr = Console.ReadLine();
+                    isExit = colStr.ToUpper() == "Q";
+                }
             }
-            while (!isPointIndexIsValid(rowStr, colStr, i_Board, i_CurrentPlayer, out o_pointIndex));
+            while (!isExit && !isPointIndexIsValid(rowStr, colStr, i_Board, i_CurrentPlayer, out o_pointIndex));
+
             return o_pointIndex;
         }
 
@@ -111,6 +125,11 @@ namespace CSharp_Ex2
                 o_Mode = eMode.Computer;
                 modeValidation = true;
             }
+            else if (i_ModeChoosen.ToUpper() == "Q")
+            {
+                o_Mode = eMode.Exit;
+                modeValidation = true;
+            }
             else
             {
                 Ex02.ConsoleUtils.Screen.Clear();
@@ -136,14 +155,14 @@ namespace CSharp_Ex2
         {
 
             bool boardInputValid = false;
-            if(i_Input.Equals("Q"))
+            if (i_Input.ToUpper().Equals("Q"))
             {
                 boardInputValid = true;
                 i_BoardSize = -1;
             }
-            else if(int.TryParse(i_Input, out i_BoardSize))
+            else if (int.TryParse(i_Input, out i_BoardSize))
             {
-                if(i_BoardSize >= 3 && i_BoardSize <= 9)
+                if (i_BoardSize >= 3 && i_BoardSize <= 9)
                 {
                     boardInputValid = true;
                 }
