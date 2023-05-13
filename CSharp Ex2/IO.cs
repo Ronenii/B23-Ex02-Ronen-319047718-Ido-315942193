@@ -30,6 +30,12 @@ namespace CSharp_Ex2
             return boardSize;
         }
 
+        public static void PrintScore(Player i_P1, Player i_P2)
+        {
+            Console.WriteLine("{0}: {1}",i_P1.ToString(), i_P1.Score);
+            Console.WriteLine("{0}: {1}", i_P2.ToString(), i_P2.Score);
+        }
+
         public static eMode getPlayingMode()
         {
             string modeChoosen;

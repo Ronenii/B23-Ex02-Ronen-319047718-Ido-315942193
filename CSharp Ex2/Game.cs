@@ -70,6 +70,7 @@ namespace CSharp_Ex2
                 Ex02.ConsoleUtils.Screen.Clear();
                 IO.printGameBoard(m_board);
                 IO.printGameEndedMessage(m_EndingMessage);
+                IO.PrintScore(m_firstPlayer,m_secondPlayer);
                 resetGame();
             }
 
@@ -126,23 +127,23 @@ namespace CSharp_Ex2
         // If so then returns true, false otherwise.
         private bool isPlayerLost(int i_Row, int i_Column)
         {
-            bool playerLost = false;
+            bool rowSameShpe = false, columnSameShape = false, topLeftBottomRightDiagonalSameShape = false, BottomLeftTopRightDiagonalSameShape = false;
 
             if (m_board.OccupiedCellsInColumnBucket[i_Column] == m_boardSize)
             {
-                playerLost = isColumnSameShape(i_Column);
+                columnSameShape = isColumnSameShape(i_Column);
             }
 
             if (m_board.OccupiedCellsInRowBucket[i_Row] == m_boardSize)
             {
-                playerLost = isRowSameShape(i_Row);
+                rowSameShpe = isRowSameShape(i_Row);
             }
 
             if ((i_Row) == (i_Column)) // Check if the given point is on the top left to bottom right diagonal 
             {
                 if (m_board.OccupiedCellsInDiagonalBucketBucket[0] == m_boardSize)
                 {
-                    playerLost = isDiagonalSameShape(eDiagonal.TopLeftToBottomRight);
+                    topLeftBottomRightDiagonalSameShape = isDiagonalSameShape(eDiagonal.TopLeftToBottomRight);
                 }
             }
 
@@ -150,11 +151,11 @@ namespace CSharp_Ex2
             {
                 if (m_board.OccupiedCellsInDiagonalBucketBucket[1] == m_boardSize)
                 {
-                    playerLost = isDiagonalSameShape(eDiagonal.BottomLeftToTopRight);
+                    BottomLeftTopRightDiagonalSameShape = isDiagonalSameShape(eDiagonal.BottomLeftToTopRight);
                 }
             }
 
-            return playerLost;
+            return rowSameShpe || columnSameShape || topLeftBottomRightDiagonalSameShape || BottomLeftTopRightDiagonalSameShape;
         }
 
         // Return true if the given row is the same shape
