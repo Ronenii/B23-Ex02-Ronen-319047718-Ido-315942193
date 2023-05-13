@@ -69,7 +69,7 @@ namespace CSharp_Ex2
                     isExit = (colStr.ToUpper() == "Q");
                 }
             }
-            while (!isPointIndexIsValid(rowStr, colStr, i_Board, i_CurrentPlayer, i_firstPlayer, i_secondPlayer, out o_pointIndex));
+            while (!isExit && !isPointIndexIsValid(rowStr, colStr, i_Board, i_CurrentPlayer, i_firstPlayer, i_secondPlayer, out o_pointIndex));
 
             return o_pointIndex;
         }
@@ -110,7 +110,7 @@ namespace CSharp_Ex2
             Console.WriteLine("Invalid input: {0}", i_ErrorMessage);
         }
 
-        public static void printGameEndedMessage(string i_EndingMessage)
+        public static void PrintGameEndedMessage(string i_EndingMessage)
         {
             Console.WriteLine("Game ended: {0}", i_EndingMessage);
             Console.WriteLine("Press any key to continue...");

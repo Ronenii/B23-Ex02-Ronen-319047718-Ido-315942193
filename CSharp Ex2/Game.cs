@@ -35,6 +35,7 @@ namespace CSharp_Ex2
             if (m_boardSize == -1)
             {
                 m_EndingMessage = gameQuitMessage;
+                IO.PrintGameEndedMessage(m_EndingMessage);
             }
             else
             {
@@ -42,6 +43,7 @@ namespace CSharp_Ex2
                 if (m_secondPlayer.Mode == eMode.Exit)
                 {
                     m_EndingMessage = gameQuitMessage;
+                    IO.PrintGameEndedMessage(m_EndingMessage);
                 }
                 else
                 {
@@ -69,11 +71,9 @@ namespace CSharp_Ex2
 
                 Ex02.ConsoleUtils.Screen.Clear();
                 IO.printGameBoard(m_board, m_firstPlayer, m_secondPlayer);
-                IO.printGameEndedMessage(m_EndingMessage);
+                IO.PrintGameEndedMessage(m_EndingMessage);
                 resetGame();
             }
-
-
         }
 
         // Player turn logic.
@@ -88,7 +88,7 @@ namespace CSharp_Ex2
             IO.PrintPlayerTurnPrompt(m_currentPlayer);
             do
             {
-                PointIndex point = IO.GetHumanPointIndex(m_board, m_currentPlayer);
+                PointIndex point = IO.GetHumanPointIndex(m_board, m_currentPlayer, m_firstPlayer, m_secondPlayer);
                 row = point.Row - 1;
                 column = point.Column - 1;
             }
