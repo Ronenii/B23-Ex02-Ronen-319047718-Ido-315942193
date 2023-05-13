@@ -26,8 +26,22 @@ namespace CSharp_Ex2
         public void RunGame()
         {
             m_boardSize = IO.getBoardSizeInput();
-            m_secondPlayer.Mode = IO.getPlayingMode();
-            gameManagementHandler();
+            if (m_boardSize == -1)
+            {
+                IO.PrintGoodbyeMessage();
+            }
+            else
+            {
+                m_secondPlayer.Mode = IO.getPlayingMode();
+                if (m_secondPlayer.Mode == eMode.Exit)
+                {
+                    IO.PrintGoodbyeMessage();
+                }
+                else
+                {
+                    gameManagementHandler();
+                }
+            }
         }
 
         // The handler of the main game loop
@@ -50,8 +64,8 @@ namespace CSharp_Ex2
                 //TODO: handle Finish Game with the next four lines
                 Ex02.ConsoleUtils.Screen.Clear();
                 IO.printGameBoard(m_board);
-                Console.WriteLine("Press any key to continue...");
-                Console.ReadKey();
+                //Console.WriteLine("Press any key to continue...");
+                //Console.ReadKey();
             }
         }
 
@@ -69,11 +83,16 @@ namespace CSharp_Ex2
             }
             while (!isMoveValid(row, column, m_board));
 
-            m_board.BoardCells[row - 1, column - 1] = m_currentPlayer.CellType;
-            m_board.Turn--;
-
-            changePlayer();
-
+            if (row != -1 && column != -1)
+            {
+                m_board.BoardCells[row - 1, column - 1] = m_currentPlayer.CellType;
+                m_board.Turn--;
+                changePlayer();
+            }
+            else
+            {
+                m_quitGame = true;
+            }
         }
 
         // Returns true or false based on if the game ended.
@@ -85,6 +104,10 @@ namespace CSharp_Ex2
                 gameEnded = true;
             }
             if (isPlayerWon())
+            {
+                gameEnded = true;
+            }
+            if (m_currentPlayer.Mode == eMode.Exit)
             {
                 gameEnded = true;
             }
@@ -124,7 +147,11 @@ namespace CSharp_Ex2
         {
             bool moveValidation = true;
             string errorMessage = string.Empty;
-            if (i_col > m_boardSize || i_row > m_boardSize || i_row < 1 || i_col < 1)
+            if (i_row == -1 && i_col == -1)
+            {
+                IO.PrintGoodbyeMessage();
+            }
+            else if (i_col > m_boardSize || i_row > m_boardSize || i_row < 1 || i_col < 1)
             {
                 moveValidation = false;
                 errorMessage = "Cell out of bounds.";
