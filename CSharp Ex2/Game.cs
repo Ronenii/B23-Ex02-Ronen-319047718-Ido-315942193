@@ -148,7 +148,7 @@
         //Handle a game againt AI computer
         private void AiGameManagementHandler()
         {
-            if (m_boardSize == -1)
+            if (isUserExit())
             {
                 m_quitGame = true;
             }
