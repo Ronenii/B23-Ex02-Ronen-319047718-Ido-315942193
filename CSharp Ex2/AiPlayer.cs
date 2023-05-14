@@ -47,6 +47,20 @@ namespace CSharp_Ex2
                 m_aiPlayer = value;
             }
         }
+
+        public PointIndex PlayRandomTurn(Board i_GameBoard, int i_BoardSize)
+        {
+            int randomRow;
+            int randomCol;
+            do
+            {
+                Random random = new Random();
+                randomRow = random.Next(1, i_BoardSize);
+                randomCol = random.Next(1, i_BoardSize);
+            }
+            while (!i_GameBoard.BoardCells[randomRow, randomCol].Equals(eCellType.Empty));
+            return new PointIndex(randomRow, randomCol);
+        }
         // Using minmax algorithm determines the best cell to take.
         public PointIndex PlayTurn(Board i_GameBoard)
         {

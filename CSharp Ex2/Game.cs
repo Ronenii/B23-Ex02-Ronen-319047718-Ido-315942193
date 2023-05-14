@@ -161,7 +161,7 @@
                 {
                     if (m_currentPlayer.PlayerId == m_aiPlayer.Id)
                     {
-                        playerMove = m_aiPlayer.PlayTurn(m_board);
+                        playerMove = m_aiPlayer.PlayRandomTurn(m_board, m_boardSize);
                     }
                     else
                     {
