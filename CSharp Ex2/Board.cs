@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace CSharp_Ex2
 {
@@ -33,6 +30,7 @@ namespace CSharp_Ex2
         private int[] m_OccupiedCellsInColumnBucket; // Each index of this array represents the number of occupied cells in the corresponding column index
         private int[] m_OccupiedCellsInDiagonalBucket = new int[2]; // Index 0 of this array represents the occupied cells in the top-left to bottom right diagonal, index 1 represents the occupied cells in the other diagonal
 
+        //Ctor
         public Board(int i_BoardSize)
         {
             m_BoardCells = new eCellType[i_BoardSize, i_BoardSize];
@@ -117,7 +115,6 @@ namespace CSharp_Ex2
         }
 
         // Updates the given cell to the given player's shape. 
-
         public void UpdateBoardCell(int i_Row, int i_Col, ePlayers i_Player)
         {
             switch (i_Player)
@@ -166,13 +163,14 @@ namespace CSharp_Ex2
             }
         }
 
-        public void resetBoard()
+        //Reset Board for new game
+        public void ResetBoard()
         {
             m_TurnsLeft = m_BoardSize * m_BoardSize;
             initBoard(m_BoardSize);
-            Array.Clear(m_OccupiedCellsInColumnBucket,0,m_BoardSize);
-            Array.Clear(m_OccupiedCellsInRowBucket,0,m_BoardSize);
-            Array.Clear(m_OccupiedCellsInDiagonalBucket,0,2);
+            Array.Clear(m_OccupiedCellsInColumnBucket, 0, m_BoardSize);
+            Array.Clear(m_OccupiedCellsInRowBucket, 0, m_BoardSize);
+            Array.Clear(m_OccupiedCellsInDiagonalBucket, 0, 2);
 
         }
 
@@ -214,7 +212,7 @@ namespace CSharp_Ex2
             switch (Diagonal)
             {
                 case eDiagonal.TopLeftToBottomRight:
-                    for (int i = 0; i < m_BoardSize-1; i++)
+                    for (int i = 0; i < m_BoardSize - 1; i++)
                     {
                         if (BoardCells[i, i] != BoardCells[i + 1, i + 1])
                         {
