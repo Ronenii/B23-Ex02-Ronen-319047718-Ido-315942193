@@ -91,7 +91,6 @@ namespace CSharp_Ex2
         public static void PrintBoardWithErrors(Board i_Board, Player i_CurrentPlayer, string i_ErrorMessage, Player i_firstPlayer, Player i_secondPlayer)
         {
             PrintGameBoard(i_Board, i_firstPlayer, i_secondPlayer);
-            PrintPlayerTurnPrompt(i_CurrentPlayer);
             printErrorMessage(i_ErrorMessage);
         }
 
