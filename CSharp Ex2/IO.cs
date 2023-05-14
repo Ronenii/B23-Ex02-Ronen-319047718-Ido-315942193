@@ -36,10 +36,10 @@ namespace CSharp_Ex2
             Console.WriteLine("{0}: {1}", i_P2.ToString(), i_P2.Score);
         }
 
-        public static eMode getPlayingMode()
+        public static Game.eMode getPlayingMode()
         {
             string modeChoosen;
-            eMode eModeChoosen;
+            Game.eMode eModeChoosen;
             do
             {
                 Console.WriteLine("Please enter playing mode:");
@@ -56,9 +56,10 @@ namespace CSharp_Ex2
             string rowStr = null;
             string colStr = null;
             bool isExit = false;
-            PointIndex o_pointIndex = new PointIndex(0, 0);
+            PointIndex humanPointIndex = new PointIndex(0, 0);
             do
             {
+                PrintPlayerTurnPrompt(i_CurrentPlayer);
                 Console.Write("The row index is: ");
                 rowStr = Console.ReadLine();
                 isExit = (rowStr.ToUpper() == "Q");
@@ -69,13 +70,13 @@ namespace CSharp_Ex2
                     isExit = (colStr.ToUpper() == "Q");
                 }
             }
-            while (!isExit && !isPointIndexIsValid(rowStr, colStr, i_Board, i_CurrentPlayer, i_firstPlayer, i_secondPlayer, out o_pointIndex));
+            while (!isExit && !isPointIndexInputIsValid(rowStr, colStr, i_Board, i_CurrentPlayer, i_firstPlayer, i_secondPlayer, out humanPointIndex));
 
-            return o_pointIndex;
+            return humanPointIndex;
         }
 
         // Checks if the given input chars are valid, if not prints out error message.
-        private static bool isPointIndexIsValid(string i_RowStr, string i_ColStr, Board i_Board, Player i_CurrentPlayer, Player i_firstPlayer, Player i_secondPlayer, out PointIndex o_pointIndex)
+        private static bool isPointIndexInputIsValid(string i_RowStr, string i_ColStr, Board i_Board, Player i_CurrentPlayer, Player i_firstPlayer, Player i_secondPlayer, out PointIndex o_pointIndex)
         {
             int rowIndex = -1;
             int colIndex = -1;
@@ -101,7 +102,6 @@ namespace CSharp_Ex2
         {
             Ex02.ConsoleUtils.Screen.Clear();
             printGameBoard(i_Board, i_firstPlayer, i_secondPlayer);
-            PrintPlayerTurnPrompt(i_CurrentPlayer);
             printErrorMessage(i_ErrorMessage);
         }
 
@@ -118,23 +118,23 @@ namespace CSharp_Ex2
         }
 
         // Returns true if the chosen game mode is valid, otherwise returns false and prints error.
-        private static bool isModeValid(string i_ModeChoosen, out eMode o_Mode)
+        private static bool isModeValid(string i_ModeChoosen, out Game.eMode o_Mode)
         {
-            o_Mode = eMode.Human;
+            o_Mode = Game.eMode.Human;
             bool modeValidation = false;
             if (i_ModeChoosen == "1")
             {
-                o_Mode = eMode.Human;
+                o_Mode = Game.eMode.Human;
                 modeValidation = true;
             }
             else if (i_ModeChoosen == "2")
             {
-                o_Mode = eMode.Computer;
+                o_Mode = Game.eMode.Computer;
                 modeValidation = true;
             }
             else if (i_ModeChoosen.ToUpper() == "Q")
             {
-                o_Mode = eMode.Exit;
+                o_Mode = Game.eMode.Exit;
                 modeValidation = true;
             }
             else

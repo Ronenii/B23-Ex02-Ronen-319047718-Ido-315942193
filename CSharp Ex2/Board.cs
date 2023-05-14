@@ -175,5 +175,65 @@ namespace CSharp_Ex2
             Array.Clear(m_OccupiedCellsInDiagonalBucket,0,2);
 
         }
+
+        // Return true if the given row is the same shape
+        public bool IsRowSameShape(int i_Row)
+        {
+            bool rowSameShape = true;
+            for (int i = 0; i < m_BoardSize - 1; i++)
+            {
+                if (BoardCells[i_Row, i] != BoardCells[i_Row, i + 1])
+                {
+                    rowSameShape = false;
+                }
+            }
+
+            return rowSameShape;
+        }
+
+        // Returns true the given column is the same shape
+        public bool IsColumnSameShape(int i_Column)
+        {
+            bool columnSameShape = true;
+            for (int i = 0; i < m_BoardSize - 1; i++)
+            {
+                if (BoardCells[i, i_Column] != BoardCells[i + 1, i_Column])
+                {
+                    columnSameShape = false;
+                }
+            }
+
+            return columnSameShape;
+        }
+
+        // Return true if the given diagonal is the same shape
+        public bool IsDiagonalSameShape(eDiagonal Diagonal)
+        {
+            bool diagonalSameShape = true;
+
+            switch (Diagonal)
+            {
+                case eDiagonal.TopLeftToBottomRight:
+                    for (int i = 0; i < m_BoardSize-1; i++)
+                    {
+                        if (BoardCells[i, i] != BoardCells[i + 1, i + 1])
+                        {
+                            diagonalSameShape = false;
+                        }
+                    }
+                    break;
+                case eDiagonal.BottomLeftToTopRight:
+                    for (int i = 0; i < m_BoardSize - 1; i++)
+                    {
+                        if (BoardCells[m_BoardSize - i - 1, i] != BoardCells[m_BoardSize - i - 2, i + 1])
+                        {
+                            diagonalSameShape = false;
+                        }
+                    }
+                    break;
+            }
+
+            return diagonalSameShape;
+        }
     }
 }
