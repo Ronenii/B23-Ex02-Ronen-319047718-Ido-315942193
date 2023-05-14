@@ -33,5 +33,17 @@
                 m_column = value;
             }
         }
+
+        // Check if the given point index is quitting point
+        public bool IsQitting()
+        {
+            return (m_row == -1) && (m_column == -1);
+        }
+
+        // Check if the point is inbounds of the board.
+        public bool IsInbounds(int i_BoardSize)
+        {
+            return (m_row < i_BoardSize) && (m_column < i_BoardSize) && (m_column >= 0) && (m_row >= 0);
+        }
     }
 }
