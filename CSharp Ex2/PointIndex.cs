@@ -35,7 +35,7 @@
         }
 
         // Check if the given point index is quitting point
-        public bool IsQitting()
+        public bool IsQuitting()
         {
             return (m_row == -1) && (m_column == -1);
         }

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace CSharp_Ex2
+﻿namespace CSharp_Ex2
 {
     public static class CellTypeUtils
     {
-
+        //Convert the cellType objct to string for print it
         public static string ToCustomShape(this eCellType i_cellType)
         {
             switch (i_cellType)

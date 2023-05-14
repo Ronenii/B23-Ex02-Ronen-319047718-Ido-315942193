@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace CSharp_Ex2
+﻿namespace CSharp_Ex2
 {
     public enum ePlayers
     {
@@ -27,20 +22,38 @@ namespace CSharp_Ex2
 
         public int Score
         {
-            get { return m_score; }
-            set { m_score = value; }
+            get
+            {
+                return m_score;
+            }
+            set
+            {
+                m_score = value;
+            }
         }
 
         public ePlayers PlayerId
         {
-            get { return m_playerId; }
-            set { m_playerId = value; }
+            get
+            {
+                return m_playerId;
+            }
+            set
+            {
+                m_playerId = value;
+            }
         }
 
         public eCellType CellType
         {
-            get { return m_cellType; }
-            set { m_cellType = value; }
+            get
+            {
+                return m_cellType;
+            }
+            set
+            {
+                m_cellType = value;
+            }
         }
 
         public override string ToString()
@@ -49,10 +62,10 @@ namespace CSharp_Ex2
             switch (PlayerId)
             {
                 case ePlayers.PlayerOne:
-                    playerString = "Player 1";
+                    playerString = "Player One";
                     break;
                 case ePlayers.PlayerTwo:
-                    playerString = "Player 2";
+                    playerString = "Player Two";
                     break;
             }
 
@@ -63,11 +76,10 @@ namespace CSharp_Ex2
         // 2) Player's move is then validated to see if he didn;t input any illegal chars
         // 3) If move is legal the it returns it.
         // 4) If player pressed 'q' then the player move is returned as the point index (-1,-1)
-        public PointIndex playTurn(Board i_GameBoard, Player i_FirstPlayer, Player i_SecondPlayer)
+        public PointIndex PlayTurn(Board i_GameBoard, Player i_FirstPlayer, Player i_SecondPlayer)
         {
-            int row;
-            int column;
             PointIndex playerMove;
+            IO.PrintPlayerTurnPrompt(this);
             playerMove = IO.GetHumanPointIndex(i_GameBoard, this, i_FirstPlayer, i_SecondPlayer);
             playerMove.Row--;
             playerMove.Column--;

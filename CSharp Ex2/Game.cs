@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Text;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-
-namespace CSharp_Ex2
+﻿namespace CSharp_Ex2
 {
     public class Game
     {
@@ -17,7 +9,7 @@ namespace CSharp_Ex2
         private bool m_quitGame, m_gameEnded;
         private int m_boardSize;
         private Board m_board;
-        private Player m_firstPlayer = new Player(ePlayers.PlayerOne, 0, eCellType.Cross);
+        private readonly Player m_firstPlayer = new Player(ePlayers.PlayerOne, 0, eCellType.Cross);
         private Player m_secondPlayer = null;
         private AiPlayer m_aiPlayer = null;
         private string m_EndingMessage = string.Empty;
@@ -41,15 +33,15 @@ namespace CSharp_Ex2
         // Game loop
         public void RunGame()
         {
-            m_boardSize = IO.getBoardSizeInput();
-            if (m_boardSize == -1)
+            m_boardSize = IO.GetBoardSizeInput();
+            if (isUserExit())
             {
                 m_EndingMessage = gameQuitMessage;
                 IO.PrintGameEndedMessage(m_EndingMessage);
             }
             else
             {
-                eMode gameMode = IO.getPlayingMode();
+                eMode gameMode = IO.GetPlayingMode();
                 switch (gameMode)
                 {
                     case eMode.Exit:
@@ -69,6 +61,11 @@ namespace CSharp_Ex2
             }
         }
 
+        private bool isUserExit()
+        {
+            return m_boardSize == -1;
+        }
+
         // The handler of the main game loop
         // 1) If the player entered q when prompted to get board size the game is terminated here.
         // 2) Player makes a move and it gets validated.
@@ -78,7 +75,7 @@ namespace CSharp_Ex2
         // 6) If the player didn't quit then the game restarts.
         private void HumanGameManagementHandler()
         {
-            if (m_boardSize == -1)
+            if (isUserExit())
             {
                 m_quitGame = true;
             }
@@ -87,8 +84,7 @@ namespace CSharp_Ex2
             {
                 do
                 {
-                    Ex02.ConsoleUtils.Screen.Clear();
-                    IO.printGameBoard(m_board, m_firstPlayer, m_secondPlayer);
+                    IO.PrintGameBoard(m_board, m_firstPlayer, m_secondPlayer);
                     PointIndex playerMove = getCurrentPlayerMove();
 
                     if (!m_quitGame)
@@ -99,8 +95,7 @@ namespace CSharp_Ex2
 
                 } while (!isGameEnded());
 
-                Ex02.ConsoleUtils.Screen.Clear();
-                IO.printGameBoard(m_board, m_firstPlayer, m_secondPlayer);
+                IO.PrintGameBoard(m_board, m_firstPlayer, m_secondPlayer);
                 IO.PrintGameEndedMessage(m_EndingMessage);
                 resetGame();
             }
@@ -111,12 +106,11 @@ namespace CSharp_Ex2
         private PointIndex getCurrentPlayerMove()
         {
             PointIndex playerMove;
-
             do
             {
-                playerMove = m_currentPlayer.playTurn(m_board, m_firstPlayer, m_secondPlayer);
+                playerMove = m_currentPlayer.PlayTurn(m_board, m_firstPlayer, m_secondPlayer);
 
-                if (playerMove.IsQitting())
+                if (playerMove.IsQuitting())
                 {
                     m_quitGame = true;
                 }
@@ -133,17 +127,14 @@ namespace CSharp_Ex2
             int boardSize = m_board.BoardSize;
             int row = i_PlayerMove.Row;
             int column = i_PlayerMove.Column;
+            bool isQuitting = i_PlayerMove.IsQuitting();
 
-            if (i_PlayerMove.IsQitting())
-            {
-                // To avoid entering the other ifs with -1 in row and column indexes causing out of bounds error.
-            }
-            else if (!i_PlayerMove.IsInbounds(boardSize))
+            if (!isQuitting && !i_PlayerMove.IsInbounds(boardSize))
             {
                 moveValidation = false;
                 errorMessage = "Cell out of bounds.";
             }
-            else if (!m_board.BoardCells[row, column].Equals(eCellType.Empty))
+            else if (!isQuitting && !m_board.BoardCells[row, column].Equals(eCellType.Empty))
             {
                 moveValidation = false;
                 errorMessage = "Cell is occupied";
@@ -154,7 +145,7 @@ namespace CSharp_Ex2
             }
             return moveValidation;
         }
-
+        //Handle a game againt AI computer
         private void AiGameManagementHandler()
         {
             if (m_boardSize == -1)
@@ -170,12 +161,11 @@ namespace CSharp_Ex2
                 {
                     if (m_currentPlayer.PlayerId == m_aiPlayer.Id)
                     {
-                        playerMove = m_aiPlayer.playTurn(m_board);
+                        playerMove = m_aiPlayer.PlayTurn(m_board);
                     }
                     else
                     {
-                        Ex02.ConsoleUtils.Screen.Clear();
-                        IO.printGameBoard(m_board, m_firstPlayer, m_secondPlayer);
+                        IO.PrintGameBoard(m_board, m_firstPlayer, m_secondPlayer);
                         playerMove = getCurrentPlayerMove();
                     }
 
@@ -187,15 +177,14 @@ namespace CSharp_Ex2
 
                 } while (!isGameEnded());
 
-                Ex02.ConsoleUtils.Screen.Clear();
-                IO.printGameBoard(m_board, m_firstPlayer, m_secondPlayer);
+                IO.PrintGameBoard(m_board, m_firstPlayer, m_secondPlayer);
                 IO.PrintGameEndedMessage(m_EndingMessage);
                 if (!m_quitGame)
                 {
                     resetGame();
                 }
-            }        
-}
+            }
+        }
 
         // Updates the board and ends the game if the player lost. If player won then updates his score.
         private void updateBoardAndPlayers(int i_Row, int i_Column)
@@ -248,8 +237,6 @@ namespace CSharp_Ex2
             return rowSameShpe || columnSameShape || topLeftBottomRightDiagonalSameShape || BottomLeftTopRightDiagonalSameShape;
         }
 
-
-
         // Returns true or false based on if the game ended.
         private bool isGameEnded()
         {
@@ -269,7 +256,7 @@ namespace CSharp_Ex2
         // Restes the game board and keeps the score as is
         private void resetGame()
         {
-            m_board.resetBoard();
+            m_board.ResetBoard();
             m_gameEnded = false;
             m_currentPlayer = m_firstPlayer;
         }
@@ -285,32 +272,6 @@ namespace CSharp_Ex2
             {
                 m_currentPlayer = m_firstPlayer;
             }
-        }
-
-        // Checks that the move is within board bounds and isn't played on a taken cell.
-        private bool isMoveValid(int i_Row, int i_Column, Board i_Board)
-        {
-            bool moveValidation = true;
-            string errorMessage = string.Empty;
-            if (i_Row == -1 && i_Column == -1)
-            {
-                m_EndingMessage = gameQuitMessage;
-            }
-            else if (i_Column >= m_boardSize || i_Row >= m_boardSize || i_Row < 0 || i_Column < 0)
-            {
-                moveValidation = false;
-                errorMessage = "Cell out of bounds.";
-            }
-            else if (!i_Board.BoardCells[i_Row, i_Column].Equals(eCellType.Empty))
-            {
-                moveValidation = false;
-                errorMessage = "Cell is occupied";
-            }
-            if (moveValidation == false)
-            {
-                IO.PrintBoardWithErrors(i_Board, m_currentPlayer, errorMessage, m_firstPlayer, m_secondPlayer);
-            }
-            return moveValidation;
         }
     }
 }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 
 namespace CSharp_Ex2
 {
@@ -52,7 +48,7 @@ namespace CSharp_Ex2
             }
         }
         // Using minmax algorithm determines the best cell to take.
-        public PointIndex playTurn(Board i_GameBoard)
+        public PointIndex PlayTurn(Board i_GameBoard)
         {
             PointIndex bestCell;
             int bestScore = int.MinValue;
