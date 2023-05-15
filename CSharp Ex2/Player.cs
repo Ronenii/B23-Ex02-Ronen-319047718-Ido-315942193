@@ -80,9 +80,8 @@
         // 4) If player pressed 'q' then the player move is returned as the point index (-1,-1)
         public PointIndex PlayTurn(Board i_GameBoard, Player i_FirstPlayer, Player i_SecondPlayer)
         {
-            PointIndex playerMove;
             IO.PrintPlayerTurnPrompt(this);
-            playerMove = IO.GetHumanPointIndex(i_GameBoard, this, i_FirstPlayer, i_SecondPlayer);
+            PointIndex playerMove = IO.GetPlayerIntendedCell(i_GameBoard, this, i_FirstPlayer, i_SecondPlayer);
             playerMove.Row--;
             playerMove.Column--;
 

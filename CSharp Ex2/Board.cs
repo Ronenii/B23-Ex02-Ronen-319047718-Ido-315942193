@@ -133,11 +133,11 @@ namespace CSharp_Ex2
             }
 
             m_TurnsLeft--;
-            updateOccupationArrays(i_Row, i_Col);
+            updateBucketArrays(i_Row, i_Col);
         }
 
-        // updated the occupation arrays initialized in the beginning.
-        private void updateOccupationArrays(int i_Row, int i_Col)
+        // Updated the given point index in the bucket arrays.
+        private void updateBucketArrays(int i_Row, int i_Col)
         {
             m_OccupiedCellsInRowBucket[i_Row]++;
             m_OccupiedCellsInColumnBucket[i_Col]++;
@@ -240,7 +240,7 @@ namespace CSharp_Ex2
             return diagonalSameShape;
         }
 
-        public bool isCellEmpty(PointIndex i_Cell)
+        public bool IsCellEmpty(PointIndex i_Cell)
         {
             return m_BoardCells[i_Cell.Row, i_Cell.Column] == eCellType.Empty;
         }

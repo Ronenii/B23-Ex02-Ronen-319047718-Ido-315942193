@@ -125,29 +125,29 @@
         // Checks that the move is within board bounds and isn't played on a taken cell.
         private bool isPlayerMoveValid(PointIndex i_PlayerMove)
         {
-            bool moveValidation = true;
+            bool moveValid = true;
             string errorMessage = string.Empty;
             int boardSize = m_Board.BoardSize;
 
             bool isQuitting = i_PlayerMove.IsQuitting();
 
-            if (!isQuitting && !i_PlayerMove.IsInbounds(boardSize))
+            if (!isQuitting && !i_PlayerMove.IsInBounds(boardSize))
             {
-                moveValidation = false;
+                moveValid = false;
                 errorMessage = "Cell out of bounds.";
             }
-            else if (!isQuitting && !m_Board.isCellEmpty(i_PlayerMove))
+            else if (!isQuitting && !m_Board.IsCellEmpty(i_PlayerMove))
             {
-                moveValidation = false;
+                moveValid = false;
                 errorMessage = "Cell is occupied";
             }
 
-            if (moveValidation == false)
+            if (moveValid == false)
             {
                 IO.PrintBoardWithErrors(m_Board, m_CurrentPlayer, errorMessage, r_FirstPlayer, m_SecondPlayer);
             }
 
-            return moveValidation;
+            return moveValid;
         }
 
         // Handle a game against AI computer

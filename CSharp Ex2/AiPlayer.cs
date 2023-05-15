@@ -4,23 +4,23 @@ namespace CSharp_Ex2
 {
     public class AiPlayer
     {
-        private Player m_aiPlayer;
+        private Player m_AiPlayer;
 
         public AiPlayer(ePlayers i_PlayerId, int i_Score, eCellType i_CellType)
         {
-            m_aiPlayer = new Player(i_PlayerId, i_Score, i_CellType);
+            m_AiPlayer = new Player(i_PlayerId, i_Score, i_CellType);
         }
 
         public ePlayers Id
         {
             get
             {
-                return m_aiPlayer.PlayerId;
+                return m_AiPlayer.PlayerId;
             }
 
             set
             {
-                m_aiPlayer.PlayerId = value;
+                m_AiPlayer.PlayerId = value;
             }
         }
 
@@ -28,12 +28,12 @@ namespace CSharp_Ex2
         {
             get
             {
-                return m_aiPlayer;
+                return m_AiPlayer;
             }
 
             set
             {
-                m_aiPlayer = value;
+                m_AiPlayer = value;
             }
         }
 
@@ -47,7 +47,7 @@ namespace CSharp_Ex2
                 aiMove.Row = random.Next(0, i_BoardSize);
                 aiMove.Column = random.Next(0, i_BoardSize);
             }
-            while (!i_GameBoard.isCellEmpty(aiMove));
+            while (!i_GameBoard.IsCellEmpty(aiMove));
 
             return aiMove;
         }

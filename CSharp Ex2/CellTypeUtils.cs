@@ -2,7 +2,7 @@
 {
     public static class CellTypeUtils
     {
-        // Convert the cellType objct to string for print it
+        // Convert the cellType object to string for print it
         public static string ToCustomShape(this eCellType i_cellType)
         {
             switch (i_cellType)
