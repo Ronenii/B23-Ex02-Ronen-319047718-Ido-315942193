@@ -30,7 +30,7 @@ namespace CSharp_Ex2
         private int[] m_OccupiedCellsInColumnBucket; // Each index of this array represents the number of occupied cells in the corresponding column index
         private int[] m_OccupiedCellsInDiagonalBucket = new int[2]; // Index 0 of this array represents the occupied cells in the top-left to bottom right diagonal, index 1 represents the occupied cells in the other diagonal
 
-        //Ctor
+        // Ctor
         public Board(int i_BoardSize)
         {
             m_BoardCells = new eCellType[i_BoardSize, i_BoardSize];
@@ -41,13 +41,13 @@ namespace CSharp_Ex2
             m_BoardSize = i_BoardSize;
         }
 
-
         public eCellType[,] BoardCells
         {
             get
             {
                 return m_BoardCells;
             }
+
             set
             {
                 m_BoardCells = value;
@@ -66,12 +66,14 @@ namespace CSharp_Ex2
                 m_BoardSize = value;
             }
         }
+
         public int TurnsLeft
         {
             get
             {
                 return m_TurnsLeft;
             }
+
             set
             {
                 m_TurnsLeft = value;
@@ -84,6 +86,7 @@ namespace CSharp_Ex2
             {
                 return m_OccupiedCellsInRowBucket;
             }
+
             set
             {
                 m_OccupiedCellsInRowBucket = value;
@@ -96,6 +99,7 @@ namespace CSharp_Ex2
             {
                 return m_OccupiedCellsInColumnBucket;
             }
+
             set
             {
                 m_OccupiedCellsInColumnBucket = value;
@@ -108,6 +112,7 @@ namespace CSharp_Ex2
             {
                 return m_OccupiedCellsInDiagonalBucket;
             }
+
             set
             {
                 m_OccupiedCellsInDiagonalBucket = value;
@@ -148,10 +153,9 @@ namespace CSharp_Ex2
             {
                 m_OccupiedCellsInDiagonalBucket[1]++;
             }
-
         }
 
-        //Initilize board with empty cells
+        // Initialize board with empty cells
         private void initBoard(int i_BoardSize)
         {
             for (int rowIndex = 0; rowIndex < i_BoardSize; rowIndex++)
@@ -163,7 +167,7 @@ namespace CSharp_Ex2
             }
         }
 
-        //Reset Board for new game
+        // Reset Board for new game
         public void ResetBoard()
         {
             m_TurnsLeft = m_BoardSize * m_BoardSize;
@@ -171,7 +175,6 @@ namespace CSharp_Ex2
             Array.Clear(m_OccupiedCellsInColumnBucket, 0, m_BoardSize);
             Array.Clear(m_OccupiedCellsInRowBucket, 0, m_BoardSize);
             Array.Clear(m_OccupiedCellsInDiagonalBucket, 0, 2);
-
         }
 
         // Return true if the given row is the same shape
@@ -219,7 +222,9 @@ namespace CSharp_Ex2
                             diagonalSameShape = false;
                         }
                     }
+
                     break;
+
                 case eDiagonal.BottomLeftToTopRight:
                     for (int i = 0; i < m_BoardSize - 1; i++)
                     {
@@ -228,10 +233,16 @@ namespace CSharp_Ex2
                             diagonalSameShape = false;
                         }
                     }
+
                     break;
             }
 
             return diagonalSameShape;
+        }
+
+        public bool isCellEmpty(PointIndex i_Cell)
+        {
+            return m_BoardCells[i_Cell.Row, i_Cell.Column] == eCellType.Empty;
         }
     }
 }

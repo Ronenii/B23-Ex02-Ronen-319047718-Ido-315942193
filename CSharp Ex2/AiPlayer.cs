@@ -2,7 +2,7 @@
 
 namespace CSharp_Ex2
 {
-    class AiPlayer
+    public class AiPlayer
     {
         private Player m_aiPlayer;
 
@@ -17,6 +17,7 @@ namespace CSharp_Ex2
             {
                 return m_aiPlayer.PlayerId;
             }
+
             set
             {
                 m_aiPlayer.PlayerId = value;
@@ -29,24 +30,26 @@ namespace CSharp_Ex2
             {
                 return m_aiPlayer;
             }
+
             set
             {
                 m_aiPlayer = value;
             }
         }
-        //Randomize the computer turn
+
+        // Randomize the computer turn
         public PointIndex PlayTurn(Board i_GameBoard, int i_BoardSize)
         {
-            int randomRow;
-            int randomCol;
+            PointIndex aiMove = new PointIndex();
             do
             {
                 Random random = new Random();
-                randomRow = random.Next(0, i_BoardSize);
-                randomCol = random.Next(0, i_BoardSize);
+                aiMove.Row = random.Next(0, i_BoardSize);
+                aiMove.Column = random.Next(0, i_BoardSize);
             }
-            while (!i_GameBoard.BoardCells[randomRow, randomCol].Equals(eCellType.Empty));
-            return new PointIndex(randomRow, randomCol);
+            while (!i_GameBoard.isCellEmpty(aiMove));
+
+            return aiMove;
         }
     }
 }

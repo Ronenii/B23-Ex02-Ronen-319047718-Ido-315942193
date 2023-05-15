@@ -12,7 +12,6 @@
         private int m_score;
         private eCellType m_cellType;
 
-
         public Player(ePlayers playerId, int score, eCellType cellType)
         {
             m_playerId = playerId;
@@ -26,6 +25,7 @@
             {
                 return m_score;
             }
+
             set
             {
                 m_score = value;
@@ -38,6 +38,7 @@
             {
                 return m_playerId;
             }
+
             set
             {
                 m_playerId = value;
@@ -50,6 +51,7 @@
             {
                 return m_cellType;
             }
+
             set
             {
                 m_cellType = value;
@@ -86,7 +88,5 @@
 
             return playerMove;
         }
-
-
     }
 }

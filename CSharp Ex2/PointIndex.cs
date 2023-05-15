@@ -17,17 +17,20 @@
             {
                 return m_row;
             }
+
             set
             {
                 m_row = value;
             }
         }
+
         public int Column
         {
             get
             {
                 return m_column;
             }
+
             set
             {
                 m_column = value;

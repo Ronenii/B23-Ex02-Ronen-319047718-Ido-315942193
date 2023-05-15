@@ -4,12 +4,12 @@
     {
         private const string gameQuitMessage = "Quitting";
         private const string boardFullMessage = "Board full. No Winners.";
+        private readonly Player m_firstPlayer = new Player(ePlayers.PlayerOne, 0, eCellType.Cross);
 
         private Player m_currentPlayer;
         private bool m_quitGame, m_gameEnded;
         private int m_boardSize;
         private Board m_board;
-        private readonly Player m_firstPlayer = new Player(ePlayers.PlayerOne, 0, eCellType.Cross);
         private Player m_secondPlayer = null;
         private AiPlayer m_aiPlayer = null;
         private string m_EndingMessage = string.Empty;
@@ -79,6 +79,7 @@
             {
                 m_quitGame = true;
             }
+
             m_board = new Board(m_boardSize);
             while (!m_quitGame)
             {
@@ -93,7 +94,8 @@
                         changePlayer();
                     }
 
-                } while (!isGameEnded());
+                }
+                while (!isGameEnded());
 
                 IO.PrintGameBoard(m_board, m_firstPlayer, m_secondPlayer);
                 IO.PrintGameEndedMessage(m_EndingMessage);
@@ -114,7 +116,8 @@
                 {
                     m_quitGame = true;
                 }
-            } while (!isPlayerMoveValid(playerMove));
+            } 
+            while (!isPlayerMoveValid(playerMove));
 
             return playerMove;
         }
@@ -125,8 +128,6 @@
             bool moveValidation = true;
             string errorMessage = string.Empty;
             int boardSize = m_board.BoardSize;
-            int row = i_PlayerMove.Row;
-            int column = i_PlayerMove.Column;
             bool isQuitting = i_PlayerMove.IsQuitting();
 
             if (!isQuitting && !i_PlayerMove.IsInbounds(boardSize))
@@ -134,18 +135,21 @@
                 moveValidation = false;
                 errorMessage = "Cell out of bounds.";
             }
-            else if (!isQuitting && !m_board.BoardCells[row, column].Equals(eCellType.Empty))
+            else if (!isQuitting && !m_board.isCellEmpty(i_PlayerMove))
             {
                 moveValidation = false;
                 errorMessage = "Cell is occupied";
             }
+
             if (moveValidation == false)
             {
                 IO.PrintBoardWithErrors(m_board, m_currentPlayer, errorMessage, m_firstPlayer, m_secondPlayer);
             }
+
             return moveValidation;
         }
-        //Handle a game againt AI computer
+
+        // Handle a game against AI computer
         private void AiGameManagementHandler()
         {
             if (isUserExit())
@@ -174,8 +178,8 @@
                         updateBoardAndPlayers(playerMove.Row, playerMove.Column);
                         changePlayer();
                     }
-
-                } while (!isGameEnded());
+                } 
+                while (!isGameEnded());
 
                 IO.PrintGameBoard(m_board, m_firstPlayer, m_secondPlayer);
                 IO.PrintGameEndedMessage(m_EndingMessage);
@@ -218,7 +222,7 @@
                 rowSameShpe = m_board.IsRowSameShape(i_Row);
             }
 
-            if ((i_Row) == (i_Column)) // Check if the given point is on the top left to bottom right diagonal 
+            if (i_Row == i_Column) // Check if the given point is on the top left to bottom right diagonal 
             {
                 if (m_board.OccupiedCellsInDiagonalBucketBucket[0] == m_boardSize)
                 {
@@ -245,11 +249,13 @@
                 m_gameEnded = true;
                 m_EndingMessage = gameQuitMessage;
             }
-            if (m_board.TurnsLeft == 0 && !m_gameEnded) //If there are no moves and the game didn't end because someone won
+
+            if (m_board.TurnsLeft == 0 && !m_gameEnded) // If there are no moves and the game didn't end because someone won
             {
                 m_gameEnded = true;
                 m_EndingMessage = boardFullMessage;
             }
+
             return m_gameEnded;
         }
 

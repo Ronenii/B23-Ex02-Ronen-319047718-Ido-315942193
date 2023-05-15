@@ -2,7 +2,7 @@
 
 namespace CSharp_Ex2
 {
-    class IO
+    public class IO
     {
         private const string NEW_LINE_SEPERATOR = "===="; // The seperator symbol
 
@@ -27,7 +27,7 @@ namespace CSharp_Ex2
             return boardSize;
         }
 
-        //Return the player mode by the user input
+        // Return the player mode by the user input
         public static Game.eMode GetPlayingMode()
         {
             string modeChoosen;
@@ -78,12 +78,14 @@ namespace CSharp_Ex2
                     pointIndexValidation = true;
                 }
             }
+
             o_pointIndex = new PointIndex(rowIndex, colIndex);
             if (!pointIndexValidation)
             {
                 string errorMessage = string.Format("Input must be between 1 and {0}", i_Board.BoardSize);
                 PrintBoardWithErrors(i_Board, i_CurrentPlayer, errorMessage, i_firstPlayer, i_secondPlayer);
             }
+
             return pointIndexValidation;
         }
 
@@ -94,13 +96,13 @@ namespace CSharp_Ex2
             printErrorMessage(i_ErrorMessage);
         }
 
-        //Print an error message with the given format
+        // Print an error message with the given format
         private static void printErrorMessage(string i_ErrorMessage)
         {
             Console.WriteLine("Invalid input: {0}", i_ErrorMessage);
         }
 
-        //Printing the end game message.
+        // Printing the end game message.
         public static void PrintGameEndedMessage(string i_EndingMessage)
         {
             Console.WriteLine("Game ended: {0}", i_EndingMessage);
@@ -133,10 +135,11 @@ namespace CSharp_Ex2
                 Ex02.ConsoleUtils.Screen.Clear();
                 printErrorMessage("Unsupported mode");
             }
+
             return modeValidation;
         }
 
-        //Printing the playing player
+        // Printing the playing player
         public static void PrintPlayerTurnPrompt(Player i_CurrentPlayer)
         {
             Console.WriteLine($"{i_CurrentPlayer}'s turn.");
@@ -145,7 +148,6 @@ namespace CSharp_Ex2
         // Returns true if the board size input is correct, otherwise prints error and returns false
         private static bool isBoardSizeInputValid(string i_Input, out int i_BoardSize)
         {
-
             bool boardInputValid;
             if (i_Input.ToUpper().Equals("Q"))
             {
@@ -169,9 +171,9 @@ namespace CSharp_Ex2
                 printErrorMessage("size must be a number between 3 and 9");
                 boardInputValid = false;
             }
+
             return boardInputValid;
         }
-
 
         // Prints out the Game Board
         public static void PrintGameBoard(Board i_GameBoard, Player firstPlayer, Player secondPlayer)
@@ -195,6 +197,7 @@ namespace CSharp_Ex2
                 {
                     Console.Write($"| {CellTypeUtils.ToCustomShape(i_GameBoard.BoardCells[i - 1, j - 1])} "); // Print empty spaces for the remaining columns
                 }
+
                 Console.WriteLine("|");
                 printRowSeparator(boardSize);
                 Console.WriteLine();
@@ -209,6 +212,7 @@ namespace CSharp_Ex2
             {
                 Console.Write(NEW_LINE_SEPERATOR);
             }
+
             Console.Write("="); // for the edge
         }
     }
