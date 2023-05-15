@@ -4,7 +4,7 @@ namespace CSharp_Ex2
 {
     public class IO
     {
-        private const string NEW_LINE_SEPERATOR = "===="; // The seperator symbol
+        private const string k_NewLineSeparator = "===="; // The seperator symbol
 
         // Prompts the player to input a board size and while the input is invalid prompts the player to to input again. return the size as int.
         public static int GetBoardSizeInput()
@@ -210,7 +210,7 @@ namespace CSharp_Ex2
             Console.Write("  ");
             for (int k = 0; k < boardSize; k++)
             {
-                Console.Write(NEW_LINE_SEPERATOR);
+                Console.Write(k_NewLineSeparator);
             }
 
             Console.Write("="); // for the edge

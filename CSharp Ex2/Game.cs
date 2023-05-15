@@ -2,16 +2,16 @@
 {
     public class Game
     {
-        private const string gameQuitMessage = "Quitting";
-        private const string boardFullMessage = "Board full. No Winners.";
-        private readonly Player m_firstPlayer = new Player(ePlayers.PlayerOne, 0, eCellType.Cross);
+        private const string k_GameQuitMessage = "Quitting";
+        private const string k_BoardFullMessage = "Board full. No Winners.";
+        private readonly Player r_FirstPlayer = new Player(ePlayers.PlayerOne, 0, eCellType.Cross);
 
-        private Player m_currentPlayer;
-        private bool m_quitGame, m_gameEnded;
-        private int m_boardSize;
-        private Board m_board;
-        private Player m_secondPlayer = null;
-        private AiPlayer m_aiPlayer = null;
+        private Player m_CurrentPlayer;
+        private bool m_QuitGame, m_GameEnded;
+        private int m_BoardSize;
+        private Board m_Board;
+        private Player m_SecondPlayer = null;
+        private AiPlayer m_AiPlayer = null;
         private string m_EndingMessage = string.Empty;
 
         public enum eMode
@@ -23,20 +23,20 @@
 
         public Game()
         {
-            m_quitGame = false;
-            m_gameEnded = false;
-            m_boardSize = 0;
-            m_currentPlayer = m_firstPlayer;
-            m_board = null;
+            m_QuitGame = false;
+            m_GameEnded = false;
+            m_BoardSize = 0;
+            m_CurrentPlayer = r_FirstPlayer;
+            m_Board = null;
         }
 
         // Game loop
         public void RunGame()
         {
-            m_boardSize = IO.GetBoardSizeInput();
+            m_BoardSize = IO.GetBoardSizeInput();
             if (isUserExit())
             {
-                m_EndingMessage = gameQuitMessage;
+                m_EndingMessage = k_GameQuitMessage;
                 IO.PrintGameEndedMessage(m_EndingMessage);
             }
             else
@@ -45,16 +45,16 @@
                 switch (gameMode)
                 {
                     case eMode.Exit:
-                        m_EndingMessage = gameQuitMessage;
+                        m_EndingMessage = k_GameQuitMessage;
                         IO.PrintGameEndedMessage(m_EndingMessage);
                         break;
                     case eMode.Human:
-                        m_secondPlayer = new Player(ePlayers.PlayerTwo, 0, eCellType.Circle);
+                        m_SecondPlayer = new Player(ePlayers.PlayerTwo, 0, eCellType.Circle);
                         HumanGameManagementHandler();
                         break;
                     case eMode.Computer:
-                        m_aiPlayer = new AiPlayer(ePlayers.PlayerTwo, 0, eCellType.Circle);
-                        m_secondPlayer = m_aiPlayer.PlayerData;
+                        m_AiPlayer = new AiPlayer(ePlayers.PlayerTwo, 0, eCellType.Circle);
+                        m_SecondPlayer = m_AiPlayer.PlayerData;
                         AiGameManagementHandler();
                         break;
                 }
@@ -63,7 +63,7 @@
 
         private bool isUserExit()
         {
-            return m_boardSize == -1;
+            return m_BoardSize == -1;
         }
 
         // The handler of the main game loop
@@ -77,18 +77,18 @@
         {
             if (isUserExit())
             {
-                m_quitGame = true;
+                m_QuitGame = true;
             }
 
-            m_board = new Board(m_boardSize);
-            while (!m_quitGame)
+            m_Board = new Board(m_BoardSize);
+            while (!m_QuitGame)
             {
                 do
                 {
-                    IO.PrintGameBoard(m_board, m_firstPlayer, m_secondPlayer);
+                    IO.PrintGameBoard(m_Board, r_FirstPlayer, m_SecondPlayer);
                     PointIndex playerMove = getCurrentPlayerMove();
 
-                    if (!m_quitGame)
+                    if (!m_QuitGame)
                     {
                         updateBoardAndPlayers(playerMove.Row, playerMove.Column);
                         changePlayer();
@@ -97,7 +97,7 @@
                 }
                 while (!isGameEnded());
 
-                IO.PrintGameBoard(m_board, m_firstPlayer, m_secondPlayer);
+                IO.PrintGameBoard(m_Board, r_FirstPlayer, m_SecondPlayer);
                 IO.PrintGameEndedMessage(m_EndingMessage);
                 resetGame();
             }
@@ -110,11 +110,11 @@
             PointIndex playerMove;
             do
             {
-                playerMove = m_currentPlayer.PlayTurn(m_board, m_firstPlayer, m_secondPlayer);
+                playerMove = m_CurrentPlayer.PlayTurn(m_Board, r_FirstPlayer, m_SecondPlayer);
 
                 if (playerMove.IsQuitting())
                 {
-                    m_quitGame = true;
+                    m_QuitGame = true;
                 }
             } 
             while (!isPlayerMoveValid(playerMove));
@@ -127,7 +127,8 @@
         {
             bool moveValidation = true;
             string errorMessage = string.Empty;
-            int boardSize = m_board.BoardSize;
+            int boardSize = m_Board.BoardSize;
+
             bool isQuitting = i_PlayerMove.IsQuitting();
 
             if (!isQuitting && !i_PlayerMove.IsInbounds(boardSize))
@@ -135,7 +136,7 @@
                 moveValidation = false;
                 errorMessage = "Cell out of bounds.";
             }
-            else if (!isQuitting && !m_board.isCellEmpty(i_PlayerMove))
+            else if (!isQuitting && !m_Board.isCellEmpty(i_PlayerMove))
             {
                 moveValidation = false;
                 errorMessage = "Cell is occupied";
@@ -143,7 +144,7 @@
 
             if (moveValidation == false)
             {
-                IO.PrintBoardWithErrors(m_board, m_currentPlayer, errorMessage, m_firstPlayer, m_secondPlayer);
+                IO.PrintBoardWithErrors(m_Board, m_CurrentPlayer, errorMessage, r_FirstPlayer, m_SecondPlayer);
             }
 
             return moveValidation;
@@ -154,26 +155,26 @@
         {
             if (isUserExit())
             {
-                m_quitGame = true;
+                m_QuitGame = true;
             }
 
             PointIndex playerMove;
-            m_board = new Board(m_boardSize);
-            while (!m_quitGame)
+            m_Board = new Board(m_BoardSize);
+            while (!m_QuitGame)
             {
                 do
                 {
-                    if (m_currentPlayer.PlayerId == m_aiPlayer.Id)
+                    if (m_CurrentPlayer.PlayerId == m_AiPlayer.Id)
                     {
-                        playerMove = m_aiPlayer.PlayTurn(m_board, m_boardSize);
+                        playerMove = m_AiPlayer.PlayTurn(m_Board, m_BoardSize);
                     }
                     else
                     {
-                        IO.PrintGameBoard(m_board, m_firstPlayer, m_secondPlayer);
+                        IO.PrintGameBoard(m_Board, r_FirstPlayer, m_SecondPlayer);
                         playerMove = getCurrentPlayerMove();
                     }
 
-                    if (!m_quitGame)
+                    if (!m_QuitGame)
                     {
                         updateBoardAndPlayers(playerMove.Row, playerMove.Column);
                         changePlayer();
@@ -181,9 +182,9 @@
                 } 
                 while (!isGameEnded());
 
-                IO.PrintGameBoard(m_board, m_firstPlayer, m_secondPlayer);
+                IO.PrintGameBoard(m_Board, r_FirstPlayer, m_SecondPlayer);
                 IO.PrintGameEndedMessage(m_EndingMessage);
-                if (!m_quitGame)
+                if (!m_QuitGame)
                 {
                     resetGame();
                 }
@@ -193,14 +194,14 @@
         // Updates the board and ends the game if the player lost. If player won then updates his score.
         private void updateBoardAndPlayers(int i_Row, int i_Column)
         {
-            m_board.UpdateBoardCell(i_Row, i_Column, m_currentPlayer.PlayerId);
-            m_gameEnded = isPlayerLost(i_Row, i_Column);
+            m_Board.UpdateBoardCell(i_Row, i_Column, m_CurrentPlayer.PlayerId);
+            m_GameEnded = isPlayerLost(i_Row, i_Column);
 
-            if (m_gameEnded)
+            if (m_GameEnded)
             {
                 changePlayer();
-                m_currentPlayer.Score++;
-                m_EndingMessage = string.Format("{0} Won!", m_currentPlayer.ToString());
+                m_CurrentPlayer.Score++;
+                m_EndingMessage = string.Format("{0} Won!", m_CurrentPlayer.ToString());
             }
         }
 
@@ -212,29 +213,29 @@
         {
             bool rowSameShpe = false, columnSameShape = false, topLeftBottomRightDiagonalSameShape = false, BottomLeftTopRightDiagonalSameShape = false;
 
-            if (m_board.OccupiedCellsInColumnBucket[i_Column] == m_boardSize)
+            if (m_Board.OccupiedCellsInColumnBucket[i_Column] == m_BoardSize)
             {
-                columnSameShape = m_board.IsColumnSameShape(i_Column);
+                columnSameShape = m_Board.IsColumnSameShape(i_Column);
             }
 
-            if (m_board.OccupiedCellsInRowBucket[i_Row] == m_boardSize)
+            if (m_Board.OccupiedCellsInRowBucket[i_Row] == m_BoardSize)
             {
-                rowSameShpe = m_board.IsRowSameShape(i_Row);
+                rowSameShpe = m_Board.IsRowSameShape(i_Row);
             }
 
             if (i_Row == i_Column) // Check if the given point is on the top left to bottom right diagonal 
             {
-                if (m_board.OccupiedCellsInDiagonalBucketBucket[0] == m_boardSize)
+                if (m_Board.OccupiedCellsInDiagonalBucketBucket[0] == m_BoardSize)
                 {
-                    topLeftBottomRightDiagonalSameShape = m_board.IsDiagonalSameShape(eDiagonal.TopLeftToBottomRight);
+                    topLeftBottomRightDiagonalSameShape = m_Board.IsDiagonalSameShape(eDiagonal.TopLeftToBottomRight);
                 }
             }
 
-            if (i_Row == (m_boardSize - i_Column - 1)) // Check if the given point is on the bottom left to top right diagonal
+            if (i_Row == (m_BoardSize - i_Column - 1)) // Check if the given point is on the bottom left to top right diagonal
             {
-                if (m_board.OccupiedCellsInDiagonalBucketBucket[1] == m_boardSize)
+                if (m_Board.OccupiedCellsInDiagonalBucketBucket[1] == m_BoardSize)
                 {
-                    BottomLeftTopRightDiagonalSameShape = m_board.IsDiagonalSameShape(eDiagonal.BottomLeftToTopRight);
+                    BottomLeftTopRightDiagonalSameShape = m_Board.IsDiagonalSameShape(eDiagonal.BottomLeftToTopRight);
                 }
             }
 
@@ -244,39 +245,39 @@
         // Returns true or false based on if the game ended.
         private bool isGameEnded()
         {
-            if (m_quitGame == true)
+            if (m_QuitGame == true)
             {
-                m_gameEnded = true;
-                m_EndingMessage = gameQuitMessage;
+                m_GameEnded = true;
+                m_EndingMessage = k_GameQuitMessage;
             }
 
-            if (m_board.TurnsLeft == 0 && !m_gameEnded) // If there are no moves and the game didn't end because someone won
+            if (m_Board.TurnsLeft == 0 && !m_GameEnded) // If there are no moves and the game didn't end because someone won
             {
-                m_gameEnded = true;
-                m_EndingMessage = boardFullMessage;
+                m_GameEnded = true;
+                m_EndingMessage = k_BoardFullMessage;
             }
 
-            return m_gameEnded;
+            return m_GameEnded;
         }
 
         // Restes the game board and keeps the score as is
         private void resetGame()
         {
-            m_board.ResetBoard();
-            m_gameEnded = false;
-            m_currentPlayer = m_firstPlayer;
+            m_Board.ResetBoard();
+            m_GameEnded = false;
+            m_CurrentPlayer = r_FirstPlayer;
         }
 
         // Changes the current player to the other player
         private void changePlayer()
         {
-            if (m_currentPlayer.PlayerId.Equals(ePlayers.PlayerOne))
+            if (m_CurrentPlayer.PlayerId.Equals(ePlayers.PlayerOne))
             {
-                m_currentPlayer = m_secondPlayer;
+                m_CurrentPlayer = m_SecondPlayer;
             }
             else
             {
-                m_currentPlayer = m_firstPlayer;
+                m_CurrentPlayer = r_FirstPlayer;
             }
         }
     }

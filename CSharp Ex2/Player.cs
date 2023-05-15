@@ -8,27 +8,27 @@
 
     public class Player
     {
-        private ePlayers m_playerId;
-        private int m_score;
-        private eCellType m_cellType;
+        private ePlayers m_PlayerId;
+        private int m_Score;
+        private eCellType m_CellType;
 
-        public Player(ePlayers playerId, int score, eCellType cellType)
+        public Player(ePlayers i_PlayerId, int i_Score, eCellType i_CellType)
         {
-            m_playerId = playerId;
-            m_score = score;
-            m_cellType = cellType;
+            m_PlayerId = i_PlayerId;
+            m_Score = i_Score;
+            m_CellType = i_CellType;
         }
 
         public int Score
         {
             get
             {
-                return m_score;
+                return m_Score;
             }
 
             set
             {
-                m_score = value;
+                m_Score = value;
             }
         }
 
@@ -36,12 +36,12 @@
         {
             get
             {
-                return m_playerId;
+                return m_PlayerId;
             }
 
             set
             {
-                m_playerId = value;
+                m_PlayerId = value;
             }
         }
 
@@ -49,12 +49,12 @@
         {
             get
             {
-                return m_cellType;
+                return m_CellType;
             }
 
             set
             {
-                m_cellType = value;
+                m_CellType = value;
             }
         }
 
