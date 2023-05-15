@@ -42,8 +42,8 @@ namespace CSharp_Ex2
             do
             {
                 Random random = new Random();
-                randomRow = random.Next(1, i_BoardSize);
-                randomCol = random.Next(1, i_BoardSize);
+                randomRow = random.Next(0, i_BoardSize);
+                randomCol = random.Next(0, i_BoardSize);
             }
             while (!i_GameBoard.BoardCells[randomRow, randomCol].Equals(eCellType.Empty));
             return new PointIndex(randomRow, randomCol);
