@@ -120,36 +120,36 @@ namespace CSharp_Ex2
         }
 
         // Updates the given cell to the given player's shape. 
-        public void UpdateBoardCell(int i_Row, int i_Col, ePlayers i_Player)
+        public void UpdateBoardCell(PointIndex i_Cell, ePlayers i_Player)
         {
             switch (i_Player)
             {
                 case ePlayers.PlayerOne:
-                    m_BoardCells[i_Row, i_Col] = eCellType.Cross;
+                    m_BoardCells[i_Cell.Row, i_Cell.Column] = eCellType.Cross;
                     break;
                 case ePlayers.PlayerTwo:
-                    m_BoardCells[i_Row, i_Col] = eCellType.Circle;
+                    m_BoardCells[i_Cell.Row, i_Cell.Column] = eCellType.Circle;
                     break;
             }
 
             m_TurnsLeft--;
-            updateBucketArrays(i_Row, i_Col);
+            updateBucketArrays(i_Cell);
         }
 
         // Updated the given point index in the bucket arrays.
-        private void updateBucketArrays(int i_Row, int i_Col)
+        private void updateBucketArrays(PointIndex i_Cell)
         {
-            m_OccupiedCellsInRowBucket[i_Row]++;
-            m_OccupiedCellsInColumnBucket[i_Col]++;
+            m_OccupiedCellsInRowBucket[i_Cell.Row]++;
+            m_OccupiedCellsInColumnBucket[i_Cell.Column]++;
 
             // Check if cell is on diagonal 0
-            if (i_Row == i_Col)
+            if (i_Cell.Row == i_Cell.Column)
             {
                 m_OccupiedCellsInDiagonalBucket[0]++;
             }
 
             // Check if cell is on diagonal 1
-            if (i_Row == (m_BoardSize - i_Col - 1))
+            if (i_Cell.Row == (m_BoardSize - i_Cell.Column - 1))
             {
                 m_OccupiedCellsInDiagonalBucket[1]++;
             }

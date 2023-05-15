@@ -60,7 +60,7 @@
                 }
             }
         }
-
+        //Validate user does not exit when create new board
         private bool isUserExit()
         {
             return m_BoardSize == -1;
@@ -90,7 +90,7 @@
 
                     if (!m_QuitGame)
                     {
-                        updateBoardAndPlayers(playerMove.Row, playerMove.Column);
+                        updateBoardAndPlayers(playerMove);
                         changePlayer();
                     }
 
@@ -116,7 +116,7 @@
                 {
                     m_QuitGame = true;
                 }
-            } 
+            }
             while (!isPlayerMoveValid(playerMove));
 
             return playerMove;
@@ -176,10 +176,11 @@
 
                     if (!m_QuitGame)
                     {
-                        updateBoardAndPlayers(playerMove.Row, playerMove.Column);
+                        PointIndex pointIndex = new PointIndex(playerMove.Row, playerMove.Column);
+                        updateBoardAndPlayers(pointIndex);
                         changePlayer();
                     }
-                } 
+                }
                 while (!isGameEnded());
 
                 IO.PrintGameBoard(m_Board, r_FirstPlayer, m_SecondPlayer);
@@ -192,10 +193,10 @@
         }
 
         // Updates the board and ends the game if the player lost. If player won then updates his score.
-        private void updateBoardAndPlayers(int i_Row, int i_Column)
+        private void updateBoardAndPlayers(PointIndex i_Cell)
         {
-            m_Board.UpdateBoardCell(i_Row, i_Column, m_CurrentPlayer.PlayerId);
-            m_GameEnded = isPlayerLost(i_Row, i_Column);
+            m_Board.UpdateBoardCell(i_Cell, m_CurrentPlayer.PlayerId);
+            m_GameEnded = isPlayerLost(i_Cell);
 
             if (m_GameEnded)
             {
@@ -209,21 +210,21 @@
         // Checks if a given Row/Column/Diagonal is full using the bucket arrays in Board.
         // If they are then checks if the given Row/Column/Diagonal is the same shape.
         // If so then returns true, false otherwise.
-        private bool isPlayerLost(int i_Row, int i_Column)
+        private bool isPlayerLost(PointIndex i_Cell)
         {
             bool rowSameShpe = false, columnSameShape = false, topLeftBottomRightDiagonalSameShape = false, BottomLeftTopRightDiagonalSameShape = false;
 
-            if (m_Board.OccupiedCellsInColumnBucket[i_Column] == m_BoardSize)
+            if (m_Board.OccupiedCellsInColumnBucket[i_Cell.Column] == m_BoardSize)
             {
-                columnSameShape = m_Board.IsColumnSameShape(i_Column);
+                columnSameShape = m_Board.IsColumnSameShape(i_Cell.Column);
             }
 
-            if (m_Board.OccupiedCellsInRowBucket[i_Row] == m_BoardSize)
+            if (m_Board.OccupiedCellsInRowBucket[i_Cell.Row] == m_BoardSize)
             {
-                rowSameShpe = m_Board.IsRowSameShape(i_Row);
+                rowSameShpe = m_Board.IsRowSameShape(i_Cell.Row);
             }
 
-            if (i_Row == i_Column) // Check if the given point is on the top left to bottom right diagonal 
+            if (i_Cell.Row == i_Cell.Column) // Check if the given point is on the top left to bottom right diagonal 
             {
                 if (m_Board.OccupiedCellsInDiagonalBucketBucket[0] == m_BoardSize)
                 {
@@ -231,7 +232,7 @@
                 }
             }
 
-            if (i_Row == (m_BoardSize - i_Column - 1)) // Check if the given point is on the bottom left to top right diagonal
+            if (i_Cell.Row == (m_BoardSize - i_Cell.Column - 1)) // Check if the given point is on the bottom left to top right diagonal
             {
                 if (m_Board.OccupiedCellsInDiagonalBucketBucket[1] == m_BoardSize)
                 {
